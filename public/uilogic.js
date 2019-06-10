@@ -7,7 +7,12 @@ var selectedSoldier;
 var selectedCategory = DEF_CAT;
 var missionCounts = {};
 
-google.script.run.withSuccessHandler(onSuccess).loadData();
+// google.script.run.withSuccessHandler(onSuccess).loadData();
+
+function initLoad() {
+  Action.run(loadData, onSuccess);
+}
+
 
 function log(val) {
   console.log('%%%%%%%', val);

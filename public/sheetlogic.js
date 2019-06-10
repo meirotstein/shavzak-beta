@@ -41,18 +41,18 @@ function showManagementDialog() {
     .showSidebar(html);
 }
 
-function loadData() {
-  var period = MainSheet.getRange(CONSTS.DATE_COL + CONSTS.DATE_START_IDX + ':' + CONSTS.DATE_COL + CONSTS.DATE_END_IDX);
+async function loadData() {
+  var period = await MainSheet.getRange(CONSTS.DATE_COL + CONSTS.DATE_START_IDX + ':' + CONSTS.DATE_COL + CONSTS.DATE_END_IDX);
   data.startDate = period.getValues()[0][0].getTime();
   data.endDate = period.getValues()[1][0].getTime();
 
   var numOfDays = (data.endDate - data.startDate) / (1000 * 60 * 60 * 24) + 1;
 
   var sList = [];
-  var nameRange = MainSheet.getRange(CONSTS.NAME_ROW_S, CONSTS.NAME_COL, CONSTS.NAME_ROW_L, numOfDays + 1);
+  var nameRange = await MainSheet.getRange(CONSTS.NAME_ROW_S, CONSTS.NAME_COL, CONSTS.NAME_ROW_L, numOfDays + 1);
   for (var i = 0; i < CONSTS.NAME_ROW_L; ++i) {
     var values = nameRange.getValues();
-    var name = values[i][0];
+    var name = values[i] && values[i][0];
     if (name) {
       var presence = values[i].slice(1);
       data.sList.push({
@@ -63,7 +63,8 @@ function loadData() {
     }
   }
 
-  var categories = MainSheet.getRange(CONSTS.CAT_ROW_S, CONSTS.NAME_COL, CONSTS.CAT_ROW_L, numOfDays + 1).getValues();
+  var categoryRange = await MainSheet.getRange(CONSTS.CAT_ROW_S, CONSTS.NAME_COL, CONSTS.CAT_ROW_L, numOfDays + 1);
+  var categories = categoryRange.getValues();
   for (var i = 0; i < CONSTS.CAT_ROW_L; ++i) {
     var cat = categories[i][0];
     if (cat) {
@@ -75,8 +76,10 @@ function loadData() {
     }
   }
 
-  var jobs = MissionsSheet.getRange(CONSTS.JOB_ROW_S, CONSTS.JOB_COL, 1, CONSTS.JOB_COL_L).getValues();
-  var missionCounts = MissionsSheet.getRange(CONSTS.MISSION_ROW_S, CONSTS.MISSION_COL, 1, CONSTS.MISSION_COL_L).getValues();
+  var jobsRange = await MissionsSheet.getRange(CONSTS.JOB_ROW_S, CONSTS.JOB_COL, 1, CONSTS.JOB_COL_L);
+  var jobs = jobsRange.getValues();
+  var missionRange = await MissionsSheet.getRange(CONSTS.MISSION_ROW_S, CONSTS.MISSION_COL, 1, CONSTS.MISSION_COL_L);
+  var missionCounts = missionRange.getValues();
 
   if (jobs && jobs.length && missionCounts && missionCounts.length) {
     jobs[0].forEach(function (job, idx) {
@@ -84,7 +87,8 @@ function loadData() {
     });
   }
 
-  var soldiers = SoldiersSheet.getRange(CONSTS.SOL_ROW_S, CONSTS.SOL_COL, CONSTS.SOL_ROW_L, CONSTS.SOL_COL_L).getValues();
+  var soldiersRange = await SoldiersSheet.getRange(CONSTS.SOL_ROW_S, CONSTS.SOL_COL, CONSTS.SOL_ROW_L, CONSTS.SOL_COL_L);
+  var soldiers = soldiersRange.getValues();
 
   if (soldiers && soldiers.length) {
     soldiers.forEach(function (s, idx) {

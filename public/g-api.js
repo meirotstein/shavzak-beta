@@ -48,7 +48,8 @@ function updateSigninStatus(isSignedIn) {
   if (isSignedIn) {
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'block';
-    makeApiCall();
+    initLoad();
+    // makeApiCall();
   } else {
     authorizeButton.style.display = 'block';
     signoutButton.style.display = 'none';
@@ -64,13 +65,15 @@ function handleSignoutClick(event) {
 }
 
 // Load the API and make an API call.  Display the results on the screen.
-function makeApiCall() {
-  gapi.client.sheets.spreadsheets.values.get({
+function makeApiCall(action, sheet, range) {
+  return gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: '1hVhK2oJuxR_PLNlJwrpb1VM3AUtJzPfmB7twROMEfQM',
-    range: 'נוכחות!B13:B99'
+    // range: 'נוכחות!B13:B99'
+    range: `${sheet}!${range}`
   }).then(function (resp) {
-    var r = resp;
-    console.log(JSON.parse(resp.body));
+    var r = JSON.parse(resp.body);
+    console.log(r);
+    return r;
     //   var p = document.createElement('p');
     //   var name = resp.result.names[0].givenName;
     //   p.appendChild(document.createTextNode('Hello, '+name+'!'));
