@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html dir="rtl">
+  <head>    
+    <meta charset='utf-8' />
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>    
+    <button id="authorize-button" style="display: none;">Authorize</button>
+    <button id="signout-button" style="display: none;">Sign Out</button>
+
+    <input class="search-bar" placeholder="חפש שם" oninput="filterList(this.value)" onfocus="clearSearchbarValue()"/>
+    <div class="filtered-list-c" style="display:none;">
+      <ul class="filtered-list"></ul>
+    </div>
+    <table class="calendar">
+      <thead>
+        <tr>
+          <th>א</th>
+          <th>ב</th>
+          <th>ג</th>
+          <th>ד</th>
+          <th>ה</th>
+          <th>ו</th>
+          <th>ש</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    
+    <div class="categories">
+    </div>
+    <div class="comment">
+      <label>הערות</label>
+      <textarea disabled onblur="saveComment()"></textarea>
+    </div>
+    
+    <script src="g-api.js"></script>
+    <script src="local.js"></script>
+    <script src="sheetlogic.js"></script>
+    <script src="uilogic.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" 
+      onload="this.onload=function(){};handleClientLoad()" 
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+  </body>
+</html>

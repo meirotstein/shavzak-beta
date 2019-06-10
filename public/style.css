@@ -1,0 +1,121 @@
+.search-bar {
+  width: 95%;
+  height: 27px;
+  text-align: right;
+  margin: 3px;
+  border: solid 2px;
+  border-color: darkgray;
+  padding-right: 5px;
+}
+
+.filtered-list-c {
+  position: absolute;
+  max-height: 87%;
+  width: 97%;
+  overflow: auto;
+  border: solid 2px;
+  border-color: darkgray;
+  top: 64px;
+  margin-right: 3px;
+  z-index: 999;
+}
+
+ul.filtered-list {
+  padding: 0;
+  margin: 0;
+  text-align: right;
+  background: white;
+}
+
+ul.filtered-list li {
+  list-style-type: none;
+  width: 100%;
+  height: 35px;
+  line-height: 35px;
+  cursor: pointer;
+}
+
+ul.filtered-list li > span {
+  padding-right: 10px;
+}
+
+ul.filtered-list li:nth-child(even) {
+  background-color: #ccc;
+}
+
+.calendar {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.calendar tr th {
+  text-align: center;
+  font-weight: bold;
+}
+
+.calendar tr td {
+  padding: 0;
+  border: none;
+  text-align: center;
+}
+
+.calendar tr td .calendar-day {
+  border: solid 1px #ccc;
+  margin: 3px;
+  cursor: pointer;
+}
+
+.calendar tr td .calendar-day .date {
+ font-weight: bold;
+ color: #5555d4;
+}
+
+.calendar tr td .calendar-day .amount.undercount {
+ color: red;
+}
+
+.calendar tr td .calendar-day.present {
+  background: #B6D7A8;
+}
+
+.calendar tr td .calendar-day.off {
+  background: #FFE599;
+}
+
+input[type="radio"] {
+  margin: 5px 4px 2px 5px;
+  top: 6px;
+}
+
+.categories {
+  width: 77px;
+  float: right;
+}
+
+.categories input[type="radio"]:checked:after {
+  left: -3px;
+}
+
+.categories input.default-category + label {
+  font-weight: bold;
+}
+
+.comment {
+  display: none;
+}
+
+.comment label {
+  text-align: center;          
+  display: block;
+  padding-top: 14px;
+  font-weight: bold;
+}
+
+.comment textarea {
+  border: solid 2px;
+  border-color: darkgray;
+  width: 198px;
+  margin-top: 5px;
+  margin-right: 12px;
+  height: 151px;
+}
