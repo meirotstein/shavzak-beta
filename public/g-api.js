@@ -64,19 +64,31 @@ function handleSignoutClick(event) {
   gapi.auth2.getAuthInstance().signOut();
 }
 
-// Load the API and make an API call.  Display the results on the screen.
-function makeApiCall(action, sheet, range) {
+function makeApiGetCall(sheet, range, renderOption) {
   return gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: '1hVhK2oJuxR_PLNlJwrpb1VM3AUtJzPfmB7twROMEfQM',
-    // range: 'נוכחות!B13:B99'
+    valueRenderOption: renderOption || 'UNFORMATTED_VALUE',
     range: `${sheet}!${range}`
   }).then(function (resp) {
     var r = JSON.parse(resp.body);
     console.log(r);
-    return r;
-    //   var p = document.createElement('p');
-    //   var name = resp.result.names[0].givenName;
-    //   p.appendChild(document.createTextNode('Hello, '+name+'!'));
-    //   document.getElementById('content').appendChild(p);
+    return r;    
+  });
+}
+
+function makeApiUpdateCall(sheet, range, value) {
+  return gapi.client.sheets.spreadsheets.values.update({
+    spreadsheetId: '1hVhK2oJuxR_PLNlJwrpb1VM3AUtJzPfmB7twROMEfQM',
+    range: `${sheet}!${range}`,
+    valueInputOption: 'RAW',
+    resource: {values: [[ value ]] },
+  }).then(function (resp) {
+    var r = JSON.parse(resp.body);
+    console.log(r);
+    return r;    
+  }).catch(function (err) {
+    // var r = JSON.parse(resp.body);
+    console.log(err);
+    return { error: err.body }; 
   });
 }

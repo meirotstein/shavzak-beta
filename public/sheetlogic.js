@@ -100,7 +100,7 @@ async function loadData() {
         platoon: s[3],
         role: s[4],
         description: s[5],
-        comment: s[6]
+        comment: s[6] || ''
       });
     });
   }
@@ -108,17 +108,17 @@ async function loadData() {
   return data;
 }
 
-function setPresenceData(sIndex, dayIdx, value) {
-  var range = MainSheet.getRange(sIndex, dayIdx + CONSTS.NAME_COL, 1);
+async function setPresenceData(sIndex, dayIdx, value) {
+  var range = await MainSheet.getRange(sIndex, dayIdx + CONSTS.NAME_COL, 1);
   if (range) {
-    range.setValue(value);
+    return range.setValue(value);
   }
 }
 
-function setCommentData(rowIdx, value) {
-  var range = SoldiersSheet.getRange(rowIdx, 7);
+async function setCommentData(rowIdx, value) {
+  var range = await SoldiersSheet.getRange(rowIdx, 7);
   if (range) {
-    range.setValue(value);
+    return range.setValue(value);
   }
 }
 

@@ -5,9 +5,12 @@ SpreadsheetApp = {
     }
 
     Fetcher.prototype.getRange = async function(row, col, row_l, col_l) {
+      var that = this;
       var range;
+      var renderOption;
       if (typeof col === 'undefined') {
         range = row; //A1 notation
+        renderOption = 'FORMATTED_VALUE';
       } else {
         var colLetterS = columnToLetter(col);
         var colLetterE = columnToLetter(col + col_l);
@@ -15,10 +18,13 @@ SpreadsheetApp = {
         range = `${colLetterS}${row}:${colLetterE}${row + row_l}`;
 
       }
-      return makeApiCall('get', this.name, range).then(function (res) {
+      return makeApiGetCall(that.name, range, renderOption).then(function (res) {
         return {
-          getValues: function() {
+          getValues: function () {
             return res.values;
+          },
+          setValue: function (value) {
+            return makeApiUpdateCall(that.name, range, value);
           }
         };
       });

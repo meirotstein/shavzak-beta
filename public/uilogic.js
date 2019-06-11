@@ -6,10 +6,13 @@ var categories = {};
 var selectedSoldier;
 var selectedCategory = DEF_CAT;
 var missionCounts = {};
+var loader;
 
 // google.script.run.withSuccessHandler(onSuccess).loadData();
 
 function initLoad() {
+  loader = document.querySelector('.main-loader');
+  loader.style.display = 'inherit';
   Action.run(loadData, onSuccess);
 }
 
@@ -18,7 +21,12 @@ function log(val) {
   console.log('%%%%%%%', val);
 }
 
-function onSuccess(d) {
+function onSuccess(d, result) {
+  if (result && result.error) {
+    return;
+  }
+  loader.style.display = 'none';
+
   log(d);
   data = d;
 
@@ -59,7 +67,8 @@ function initView() {
       dayTD.appendChild(dayEL);
       dayEL.innerHTML =
         '<div class="date">' + day.getDate() + '/' + (day.getMonth() + 1) + '</div>' +
-        '<div class="amount">' + categories[DEF_CAT][idx] + '</div>';
+        '<div class="amount">' + categories[DEF_CAT][idx] + '</div>' + 
+        `<img style="display:none;" class="loader" src="loading.svg"></img>`;
 
       dayEL.onclick = togglePresence.bind(this, this.dates.indexOf(day), undefined);
       dayEL.oncontextmenu = togglePresence.bind(this, this.dates.indexOf(day), '');
@@ -184,11 +193,18 @@ function saveComment() {
     var commentTA = document.querySelector('.comment textarea');
     var value = commentTA.value;
     selectedSoldier.profile.comment = value;
-    google.script.run.withSuccessHandler(onCommentSave.bind(this, selectedSoldier, value)).setCommentData(selectedSoldier.profile.row, value);
+    // google.script.run.withSuccessHandler(onCommentSave.bind(this, selectedSoldier, value)).setCommentData(selectedSoldier.profile.row, value);
+    Action.run(setCommentData.bind(this, selectedSoldier.profile.row, value), onCommentSave.bind(this, selectedSoldier, value));
   }
 }
 
-function onCommentSave(selectedSoldier, value) {
+function onCommentSave(selectedSoldier, value, result) {
+  var commentTA = document.querySelector('.comment textarea');
+  if (result && result.error) {
+    commentTA.classList.add('save-error');
+    return;
+  }
+  commentTA.classList.remove('save-error');
   log('comment saved: ' + selectedSoldier.name + ', ' + value);
 }
 
@@ -229,7 +245,9 @@ function togglePresence(dayIdx, p) {
     countChange = 0;
   }
 
-  google.script.run.withSuccessHandler(onPresenceSave.bind(this, dayIdx, cat, countChange)).setPresenceData(selectedSoldier.idx, dayIdx + 1, newPresence);
+  dayEls[dayIdx].querySelector('.loader').style.display = 'inherit';
+  // google.script.run.withSuccessHandler(onPresenceSave.bind(this, dayIdx, cat, countChange)).setPresenceData(selectedSoldier.idx, dayIdx + 1, newPresence);
+  Action.run(setPresenceData.bind(this, selectedSoldier.idx, dayIdx + 1, newPresence), onPresenceSave.bind(this, dayIdx, cat, countChange));
 
   return false;
 }
@@ -238,11 +256,13 @@ function updatePresenceUI(dayIdx, presence) {
   var el = dayEls[dayIdx];
   switch (presence) {
     case 0:
+    case '0':
       // day off
       el.classList.remove('present');
       el.classList.add('off');
       break;
     case 1:
+    case '1':
       // present
       el.classList.add('present');
       el.classList.remove('off');
@@ -269,7 +289,15 @@ function updateSumValueByCategory(cat) {
   }
 }
 
-function onPresenceSave(dayIdx, cat, countChange) {
+function onPresenceSave(dayIdx, cat, countChange, result) {
+  dayEls[dayIdx].querySelector('.loader').style.display = 'none';
+  if (result && result.error) {
+    dayEls[dayIdx].classList.add('save-error');
+    return;
+  }
+
+  dayEls[dayIdx].classList.remove('save-error');
+
   if (categories[cat] && typeof categories[cat][dayIdx] !== 'undefined') {
     categories[cat][dayIdx] += countChange;
   }

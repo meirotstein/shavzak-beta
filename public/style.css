@@ -63,6 +63,12 @@ ul.filtered-list li:nth-child(even) {
   border: solid 1px #ccc;
   margin: 3px;
   cursor: pointer;
+  position: relative;
+}
+
+.calendar tr td .calendar-day.save-error {
+  border: solid red;
+  background: burlywood !important;
 }
 
 .calendar tr td .calendar-day .date {
@@ -73,6 +79,14 @@ ul.filtered-list li:nth-child(even) {
 .calendar tr td .calendar-day .amount.undercount {
  color: red;
 }
+
+.calendar tr td .calendar-day .loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+ }
 
 .calendar tr td .calendar-day.present {
   background: #B6D7A8;
@@ -118,4 +132,8 @@ input[type="radio"] {
   margin-top: 5px;
   margin-right: 12px;
   height: 151px;
+}
+
+.comment textarea.save-error {
+  border: solid red;
 }
