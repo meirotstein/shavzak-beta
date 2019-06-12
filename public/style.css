@@ -10,6 +10,11 @@ button {
   margin: 4px;
 }
 
+.auth-btn {
+  float: left;
+  margin-left: 7px;
+}
+
 .search-bar {
   width: 98%;
   height: 2em;
