@@ -1,6 +1,18 @@
+* {
+  font-size: 45px;
+  font-family: arial, sans-serif;
+}
+
+button {
+  display: block;
+  border: solid 1px;
+  border-radius: 2px;
+  margin: 4px;
+}
+
 .search-bar {
-  width: 95%;
-  height: 27px;
+  width: 98%;
+  height: 2em;
   text-align: right;
   margin: 3px;
   border: solid 2px;
@@ -15,7 +27,7 @@
   overflow: auto;
   border: solid 2px;
   border-color: darkgray;
-  top: 64px;
+  top: 3.6em;
   margin-right: 3px;
   z-index: 999;
 }
@@ -30,8 +42,8 @@ ul.filtered-list {
 ul.filtered-list li {
   list-style-type: none;
   width: 100%;
-  height: 35px;
-  line-height: 35px;
+  height: 2em;
+  line-height: 2em;
   cursor: pointer;
 }
 
@@ -72,12 +84,12 @@ ul.filtered-list li:nth-child(even) {
 }
 
 .calendar tr td .calendar-day .date {
- font-weight: bold;
- color: #5555d4;
+  font-weight: bold;
+  color: #5555d4;
 }
 
 .calendar tr td .calendar-day .amount.undercount {
- color: red;
+  color: red;
 }
 
 .calendar tr td .calendar-day .loader {
@@ -86,24 +98,36 @@ ul.filtered-list li:nth-child(even) {
   left: 0;
   height: 100%;
   width: 100%;
- }
+}
 
 .calendar tr td .calendar-day.present {
-  background: #B6D7A8;
+  background: #b6d7a8;
 }
 
 .calendar tr td .calendar-day.off {
-  background: #FFE599;
-}
-
-input[type="radio"] {
-  margin: 5px 4px 2px 5px;
-  top: 6px;
+  background: #ffe599;
 }
 
 .categories {
-  width: 77px;
+  width: 5em;
   float: right;
+  margin-top: 1em;
+}
+
+.categories > div {
+  position: relative;
+}
+
+.categories input[type="radio"] {
+  height: 1.5em;
+  width: 1.5em;
+  position: absolute;
+  top: 9px;
+}
+
+.categories label {
+  line-height: 2em;
+  padding-right: 2.5em;
 }
 
 .categories input[type="radio"]:checked:after {
@@ -119,7 +143,7 @@ input[type="radio"] {
 }
 
 .comment label {
-  text-align: center;          
+  text-align: center;
   display: block;
   padding-top: 14px;
   font-weight: bold;
@@ -128,10 +152,10 @@ input[type="radio"] {
 .comment textarea {
   border: solid 2px;
   border-color: darkgray;
-  width: 198px;
-  margin-top: 5px;
-  margin-right: 12px;
-  height: 151px;
+  width: 70%;
+  margin-top: 20px;
+  margin-right: 32px;
+  height: 12em;
 }
 
 .comment textarea.save-error {
