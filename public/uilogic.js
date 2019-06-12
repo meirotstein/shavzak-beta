@@ -13,7 +13,14 @@ var loader;
 function initLoad() {
   loader = document.querySelector('.main-loader');
   loader.style.display = 'inherit';
-  Action.run(loadData, onSuccess);
+  var spidEl = document.querySelector('.spreadsheet-id');
+  var spid = fetchFromLocalStorage();
+  if (spid) {
+    spidEl.value = spid;
+    Action.run(loadData, onSuccess);
+  } else {
+    spidEl.classList.add('error');
+  }
 }
 
 
@@ -23,6 +30,9 @@ function log(val) {
 
 function onSuccess(d, result) {
   if (result && result.error) {
+    loader.style.display = 'none';
+    var spidEl = document.querySelector('.spreadsheet-id');
+    spidEl.classList.add('error');
     return;
   }
   loader.style.display = 'none';

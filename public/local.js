@@ -40,9 +40,15 @@ SpreadsheetApp = {
 
 window.Action = {
   run: async function(action, callback) {
-    var result = await action();
+    var result;
+    var err;
+    try {
+      result = await action();
+    } catch (e) {
+      err = e;
+    }
     if (callback) {
-      callback(result);
+      callback(result, err);
     }
   }
 }

@@ -166,3 +166,20 @@ ul.filtered-list li:nth-child(even) {
 .comment textarea.save-error {
   border: solid red;
 }
+
+.spreadsheet-id {
+  width: calc(100% - 36px);
+  height: 2em;
+  text-align: right;
+  margin: 3px;
+  border: solid 2px;
+  border-color: darkgray;
+  padding-right: 5px;
+  position: absolute;
+  bottom: 15px;
+  left: 10px;
+}
+
+.spreadsheet-id.error {
+  border: solid 4px red;
+}

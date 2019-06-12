@@ -18,8 +18,19 @@ var clientId = '405201608861-r6i2r3pju0e3lvlt2m40b3d6drf9ik73.apps.googleusercon
 // for details.
 var scopes = 'https://www.googleapis.com/auth/spreadsheets';
 
+var spreadsheetId = fetchFromLocalStorage();
+
 var authorizeButton = document.getElementById('authorize-button');
 var signoutButton = document.getElementById('signout-button');
+
+function saveToLocalStorage(spid) {
+  localStorage.setItem('spreadsheet--id', spid);
+  location.reload();
+}
+
+function fetchFromLocalStorage() {
+  return localStorage.getItem('spreadsheet--id');
+}
 
 function handleClientLoad() {
   // Load the API client and auth2 library
@@ -66,19 +77,21 @@ function handleSignoutClick(event) {
 
 function makeApiGetCall(sheet, range, renderOption) {
   return gapi.client.sheets.spreadsheets.values.get({
-    spreadsheetId: '1hVhK2oJuxR_PLNlJwrpb1VM3AUtJzPfmB7twROMEfQM',
+    spreadsheetId: spreadsheetId,
     valueRenderOption: renderOption || 'UNFORMATTED_VALUE',
     range: `${sheet}!${range}`
   }).then(function (resp) {
     var r = JSON.parse(resp.body);
     console.log(r);
     return r;    
+  }).catch(function (err) {
+    throw { error: err.body }; 
   });
 }
 
 function makeApiUpdateCall(sheet, range, value) {
   return gapi.client.sheets.spreadsheets.values.update({
-    spreadsheetId: '1hVhK2oJuxR_PLNlJwrpb1VM3AUtJzPfmB7twROMEfQM',
+    spreadsheetId: spreadsheetId,
     range: `${sheet}!${range}`,
     valueInputOption: 'RAW',
     resource: {values: [[ value ]] },
