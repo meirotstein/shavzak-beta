@@ -45,6 +45,8 @@
       onload="this.onload=function(){};handleClientLoad()" 
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-    <input class="spreadsheet-id" placeholder="spreadsheet id" onblur="saveToLocalStorage(this.value)"/>
+    <div class="spreadsheet-wrapper shrink" onclick="showSpreadsheet()">
+      <input class="spreadsheet-id" placeholder="spreadsheet id" onblur="saveToLocalStorage(this.value)"/>
+    </div>
   </body>
 </html>

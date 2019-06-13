@@ -321,3 +321,8 @@ function onPresenceSave(dayIdx, cat, countChange, result) {
 function clearSearchbarValue() {
   document.querySelector('.search-bar').value = '';
 }
+
+function showSpreadsheet() {
+  var wrapper = document.querySelector('.spreadsheet-wrapper');
+  wrapper.classList.remove('shrink');
+}
