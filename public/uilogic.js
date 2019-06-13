@@ -64,9 +64,10 @@ function initView() {
   var categoriesEl = document.querySelector('.categories');
   var commentEl = document.querySelector('.comment');
 
-  function addCalendarWeek(days) {
+  function addCalendarWeek(days, weekNum) {
     var calendar = document.querySelector('.calendar tbody');
     var week = document.createElement('tr');
+    var daysIdxOffset = (weekNum || 0) * 7;
     week.className = 'calendar-week';
 
     days.forEach(function (day, idx) {
@@ -77,7 +78,7 @@ function initView() {
       dayTD.appendChild(dayEL);
       dayEL.innerHTML =
         '<div class="date">' + day.getDate() + '/' + (day.getMonth() + 1) + '</div>' +
-        '<div class="amount">' + categories[DEF_CAT][idx] + '</div>' + 
+        '<div class="amount">' + categories[DEF_CAT][idx + daysIdxOffset] + '</div>' + 
         `<img style="display:none;" class="loader" src="loading.svg"></img>`;
 
       dayEL.onclick = togglePresence.bind(this, this.dates.indexOf(day), undefined);
@@ -126,11 +127,12 @@ function initView() {
 
   var week = [];
   var currIdx = 0;
+  var weekNum = 0;
 
   while (this.dates[currIdx]) {
     week.push(this.dates[currIdx]);
     if (this.dates[currIdx].getDay() === 6 || currIdx === this.dates.length - 1) {
-      addCalendarWeek(week);
+      addCalendarWeek(week, weekNum++);
       week = [];
     }
     ++currIdx;
