@@ -186,6 +186,7 @@ function selectSoldier(evt) {
   if (sData) {
     selectedSoldier = sData;
     bar.value = sData.name;
+    fixPresence(sData);
     applyPresence(sData);
 
     commentTA.removeAttribute('disabled');
@@ -225,6 +226,14 @@ function applyPresence(sData) {
     sData.presence.forEach(function (val, idx) {
       updatePresenceUI(idx, val);
     });
+  }
+}
+
+function fixPresence(sData) {   
+  if (sData.presence && sData.presence.length < dates.length) {
+    for (var i = sData.presence.length; i < dates.length ; ++i) {
+      sData.presence[i] = "";
+    }
   }
 }
 
