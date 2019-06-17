@@ -204,6 +204,7 @@ function selectSoldier(evt) {
 function saveComment() {
   if (selectedSoldier && selectedSoldier.profile) {
     var commentTA = document.querySelector('.comment textarea');
+    var commentLoader = document.querySelector('.comment .loader').style.display = 'inherit';
     var value = commentTA.value;
     selectedSoldier.profile.comment = value;
     // google.script.run.withSuccessHandler(onCommentSave.bind(this, selectedSoldier, value)).setCommentData(selectedSoldier.profile.row, value);
@@ -213,6 +214,7 @@ function saveComment() {
 
 function onCommentSave(selectedSoldier, value, result) {
   var commentTA = document.querySelector('.comment textarea');
+  document.querySelector('.comment .loader').style.display = 'none';
   if (result && result.error) {
     commentTA.classList.add('save-error');
     return;
