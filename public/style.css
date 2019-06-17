@@ -145,7 +145,7 @@ ul.filtered-list li:nth-child(even) {
 
 .comment {
   display: none;
-  position: relative;
+  /* position: relative; */
 }
 
 .comment label {
@@ -160,7 +160,7 @@ ul.filtered-list li:nth-child(even) {
   width: 70%;
   height: 10em;
   left: 0.5em;
-  top: 3em;
+  /* top: 3em; */
 }
 
 .comment textarea {
