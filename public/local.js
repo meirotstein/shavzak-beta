@@ -48,7 +48,11 @@ window.Action = {
       err = e;
     }
     if (callback) {
-      callback(result, err);
+      if (err) {
+        result = result || {};
+        result.error = err;
+      }
+      callback(result);
     }
   }
 }
