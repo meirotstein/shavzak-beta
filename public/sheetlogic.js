@@ -1,7 +1,7 @@
 var CONSTS = {
   NAME_COL: 2,
   NAME_ROW_S: 13,
-  NAME_ROW_L: 87,
+  NAME_ROW_L: 137,
   CAT_ROW_S: 4,
   CAT_ROW_L: 7,
   DATE_COL: 'B',
@@ -16,7 +16,7 @@ var CONSTS = {
   MISSION_COL_L: 8,
 
   SOL_ROW_S: 3,
-  SOL_ROW_L: 90,
+  SOL_ROW_L: 148,
   SOL_COL: 1,
   SOL_COL_L: 7,
 }
