@@ -1,4 +1,5 @@
 var DEF_CAT = 'סהכ';
+var AT_HOME_CAT = 'בחופש';
 var data;
 var dates = [];
 var dayEls = [];
@@ -249,6 +250,7 @@ function togglePresence(dayIdx, p) {
   var oldPresence = selectedSoldier.presence[dayIdx];
   var newPresence;
   var countChange;
+  var atHomeChange;
 
   if (typeof p === 'undefined') {
     newPresence = (oldPresence === 1 ? 0 : 1);
@@ -268,9 +270,18 @@ function togglePresence(dayIdx, p) {
     countChange = 0;
   }
 
+  if (newPresence === 0) {
+    atHomeChange = 1;
+  } else if (oldPresence === 0) {
+    atHomeChange = -1;
+  } else {
+    atHomeChange = 0;
+  }
+  
+
   dayEls[dayIdx].querySelector('.loader').style.display = 'inherit';
   // google.script.run.withSuccessHandler(onPresenceSave.bind(this, dayIdx, cat, countChange)).setPresenceData(selectedSoldier.idx, dayIdx + 1, newPresence);
-  Action.run(setPresenceData.bind(this, selectedSoldier.idx, dayIdx + 1, newPresence), onPresenceSave.bind(this, dayIdx, cat, countChange));
+  Action.run(setPresenceData.bind(this, selectedSoldier.idx, dayIdx + 1, newPresence), onPresenceSave.bind(this, dayIdx, cat, countChange, atHomeChange));
 
   return false;
 }
@@ -312,7 +323,7 @@ function updateSumValueByCategory(cat) {
   }
 }
 
-function onPresenceSave(dayIdx, cat, countChange, result) {
+function onPresenceSave(dayIdx, cat, countChange, atHomeChange, result) {
   dayEls[dayIdx].querySelector('.loader').style.display = 'none';
   if (result && result.error) {
     dayEls[dayIdx].classList.add('save-error');
@@ -326,8 +337,14 @@ function onPresenceSave(dayIdx, cat, countChange, result) {
   }
   categories[DEF_CAT][dayIdx] += countChange;
 
+  if (atHomeChange !== 0) {
+    categories[AT_HOME_CAT][dayIdx] += atHomeChange;
+  }
+
   if (selectedCategory === cat || selectedCategory === DEF_CAT) {
     updateSumValueByCategory(selectedCategory);
+  } else if (selectedCategory === AT_HOME_CAT) {
+    updateSumValueByCategory(AT_HOME_CAT);
   }
 }
 
