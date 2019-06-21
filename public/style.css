@@ -166,10 +166,11 @@ ul.filtered-list li:nth-child(even) {
 .comment textarea {
   border: solid 2px;
   border-color: darkgray;
-  width: 70%;
+  width: 63%;
   margin-top: 20px;
-  margin-right: 32px;
+  margin-right: 60px;
   height: 12em;
+  padding: .1em 0.3em;
 }
 
 .comment textarea.save-error {
