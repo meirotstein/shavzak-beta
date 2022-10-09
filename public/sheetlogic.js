@@ -46,7 +46,7 @@ async function initSettings() {
     JOB_ROW_S: 2,
     JOB_COL: 3,
     JOB_COL_L: missionsSettings[0],
-    MISSION_ROW_S: 16,
+    MISSION_ROW_S: missionsSettings[1],
     MISSION_COL: 3,
     JOB_COL_L: missionsSettings[0],
 
@@ -114,7 +114,7 @@ async function loadData() {
       data.soldiers.push({
         row: SETTINGS.SOL_ROW_S + idx,
         id: s[0],
-        fullName: s[1],        
+        fullName: s[1],
         platoon: s[2],
         role: s[3],
         description: s[4],
