@@ -1,6 +1,6 @@
 SpreadsheetApp = {
-  getActive: function() {
-    var Fetcher = function(name) {
+  getActive: function () {
+    var Fetcher = function (name) {
       this.name = name;
     }
 
@@ -31,7 +31,7 @@ SpreadsheetApp = {
     }
 
     return {
-      getSheetByName: function(name) {
+      getSheetByName: function (name) {
         return new Fetcher(name);
       }
     }
@@ -57,18 +57,16 @@ window.Action = {
   }
 }
 
-String.prototype.getTime = function () { 
-  if(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.test(this)) {
+String.prototype.getTime = function () {
+  if (/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.test(this)) {
     var d = new Date(this);
     return d.getTime();
   }
 }
 
-function columnToLetter(column)
-{
+function columnToLetter(column) {
   var temp, letter = '';
-  while (column > 0)
-  {
+  while (column > 0) {
     temp = (column - 1) % 26;
     letter = String.fromCharCode(temp + 65) + letter;
     column = (column - temp - 1) / 26;
@@ -76,11 +74,9 @@ function columnToLetter(column)
   return letter;
 }
 
-function letterToColumn(letter)
-{
+function letterToColumn(letter) {
   var column = 0, length = letter.length;
-  for (var i = 0; i < length; i++)
-  {
+  for (var i = 0; i < length; i++) {
     column += (letter.charCodeAt(i) - 64) * Math.pow(26, length - i - 1);
   }
   return column;

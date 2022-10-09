@@ -15,13 +15,14 @@ function initLoad() {
   loader = document.querySelector('.main-loader');
   loader.style.display = 'inherit';
   var spidEl = document.querySelector('.spreadsheet-id');
-  var spid = fetchFromLocalStorage();
+  var spid = fetchSpreadsheetId();
   if (spid) {
     spidEl.value = spid;
     Action.run(loadData, onSuccess);
   } else {
     spidEl.classList.add('error');
-  }
+    onFail();
+  }  
 }
 
 
@@ -29,20 +30,31 @@ function log(val) {
   console.log('%%%%%%%', val);
 }
 
-function onSuccess(d, result) {
+function onFail() {
+  document.querySelector('.err-view').style.display = 'block';
+}
+
+function revealMainView() {
+  document.querySelector('.main-view').style.display = 'block';
+}
+
+function onSuccess(result) {
   if (result && result.error) {
+    onFail();
     loader.style.display = 'none';
     var spidEl = document.querySelector('.spreadsheet-id');
     spidEl.classList.add('error');
     return;
   }
   loader.style.display = 'none';
+  log(result);
 
-  log(d);
-  data = d;
+  revealMainView();
 
-  var currDate = new Date(d.startDate);
-  var endDate = new Date(d.endDate);
+  data = result;
+
+  var currDate = new Date(data.startDate);
+  var endDate = new Date(data.endDate);
 
   while (currDate <= endDate) {
     dates.push(currDate);
@@ -50,7 +62,7 @@ function onSuccess(d, result) {
     currDate.setDate(currDate.getDate() + 1);
   }
 
-  d.categories.forEach(function (c) {
+  data.categories.forEach(function (c) {
     categories[c.name] = c.sums;
   });
 

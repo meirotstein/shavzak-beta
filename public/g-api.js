@@ -18,17 +18,24 @@ var clientId = '405201608861-r6i2r3pju0e3lvlt2m40b3d6drf9ik73.apps.googleusercon
 // for details.
 var scopes = 'https://www.googleapis.com/auth/spreadsheets';
 
-var spreadsheetId = fetchFromLocalStorage();
+var spreadsheetId = fetchSpreadsheetId();
 
 var authorizeButton = document.getElementById('authorize-button');
 var signoutButton = document.getElementById('signout-button');
 
-function saveToLocalStorage(spid) {
+function saveToLocalStorage(spid, doNotReload) {
   localStorage.setItem('spreadsheet--id', spid);
-  location.reload();
+  if (!doNotReload) {
+    location.reload(); 
+  }
 }
 
-function fetchFromLocalStorage() {
+function fetchSpreadsheetId() {
+  const url = new URL(location.href);
+  const spidAsParam = url.searchParams.get('spid');
+  if (spidAsParam) {
+    saveToLocalStorage(spidAsParam, true);
+  }
   return localStorage.getItem('spreadsheet--id');
 }
 
@@ -57,8 +64,12 @@ function initClient() {
 
 function updateSigninStatus(isSignedIn) {
   if (isSignedIn) {
+    window.userProfile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'block';
+    signoutButton.textContent = 'Login as: ' + userProfile.getEmail() + ' | Sign Out';
+
     initLoad();
     // makeApiCall();
   } else {

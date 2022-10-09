@@ -15,6 +15,12 @@ button {
   margin-left: 7px;
 }
 
+.err-view {
+  font-size: 45px;
+  text-align: center;
+  padding-top: 50%;
+}
+
 .search-bar {
   width: 98%;
   height: 2em;
@@ -52,7 +58,7 @@ ul.filtered-list li {
   cursor: pointer;
 }
 
-ul.filtered-list li > span {
+ul.filtered-list li>span {
   padding-right: 20px;
 }
 
@@ -119,7 +125,7 @@ ul.filtered-list li:nth-child(even) {
   margin-top: 1em;
 }
 
-.categories > div {
+.categories>div {
   position: relative;
 }
 
@@ -139,7 +145,7 @@ ul.filtered-list li:nth-child(even) {
   left: -3px;
 }
 
-.categories input.default-category + label {
+.categories input.default-category+label {
   font-weight: bold;
 }
 
