@@ -31,6 +31,7 @@ function log(val) {
 }
 
 function onFail() {
+  toggleInitLoader(false);
   document.querySelector('.err-view').style.display = 'block';
 }
 
@@ -46,6 +47,7 @@ function onSuccess(result) {
     spidEl.classList.add('error');
     return;
   }
+  toggleInitLoader(false);
   loader.style.display = 'none';
   log(result);
 

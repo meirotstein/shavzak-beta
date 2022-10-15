@@ -23,6 +23,15 @@ var spreadsheetId = fetchSpreadsheetId();
 var authorizeButton = document.getElementById('authorize-button');
 var signoutButton = document.getElementById('signout-button');
 var signedInUser = document.getElementById('signin-user-name');
+var initLoader = document.getElementById('init-loader');
+
+function toggleInitLoader(show) {
+  if (show) {
+    initLoader.style.display = 'block';
+  } else {
+    initLoader.style.display = 'none';
+  }
+}
 
 function saveToLocalStorage(spid, doNotReload) {
   localStorage.setItem('spreadsheet--id', spid);
@@ -73,11 +82,16 @@ function updateSigninStatus(isSignedIn) {
     signedInUser.style.display = 'block';
     signedInUser.textContent = userProfile.getEmail();
 
+    toggleInitLoader(true);
+
     initLoad();
     // makeApiCall();
   } else {
     authorizeButton.style.display = 'block';
     signoutButton.style.display = 'none';
+
+
+    toggleInitLoader(false);
   }
 }
 
