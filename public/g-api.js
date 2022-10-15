@@ -70,6 +70,7 @@ function updateSigninStatus(isSignedIn) {
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'block';
 
+    signedInUser.style.display = 'block';
     signedInUser.textContent = userProfile.getEmail();
 
     initLoad();
@@ -86,6 +87,7 @@ function handleAuthClick(event) {
 
 function handleSignoutClick(event) {
   gapi.auth2.getAuthInstance().signOut();
+  location.reload();
 }
 
 function makeApiGetCall(sheet, range, renderOption) {
