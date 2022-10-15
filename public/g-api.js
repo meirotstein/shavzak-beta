@@ -22,11 +22,12 @@ var spreadsheetId = fetchSpreadsheetId();
 
 var authorizeButton = document.getElementById('authorize-button');
 var signoutButton = document.getElementById('signout-button');
+var signedInUser = document.getElementById('signin-user-name');
 
 function saveToLocalStorage(spid, doNotReload) {
   localStorage.setItem('spreadsheet--id', spid);
   if (!doNotReload) {
-    location.reload(); 
+    location.reload();
   }
 }
 
@@ -68,7 +69,8 @@ function updateSigninStatus(isSignedIn) {
 
     authorizeButton.style.display = 'none';
     signoutButton.style.display = 'block';
-    signoutButton.textContent = 'Login as: ' + userProfile.getEmail() + ' | Sign Out';
+
+    signedInUser.textContent = userProfile.getEmail();
 
     initLoad();
     // makeApiCall();
@@ -94,9 +96,9 @@ function makeApiGetCall(sheet, range, renderOption) {
   }).then(function (resp) {
     var r = JSON.parse(resp.body);
     console.log(r);
-    return r;    
+    return r;
   }).catch(function (err) {
-    throw { error: err.body }; 
+    throw { error: err.body };
   });
 }
 
@@ -105,14 +107,14 @@ function makeApiUpdateCall(sheet, range, value) {
     spreadsheetId: spreadsheetId,
     range: `${sheet}!${range}`,
     valueInputOption: 'RAW',
-    resource: {values: [[ value ]] },
+    resource: { values: [[value]] },
   }).then(function (resp) {
     var r = JSON.parse(resp.body);
     console.log(r);
-    return r;    
+    return r;
   }).catch(function (err) {
     // var r = JSON.parse(resp.body);
     console.log(err);
-    return { error: err.body }; 
+    return { error: err.body };
   });
 }

@@ -5,9 +5,25 @@
 
 button {
   display: block;
-  border: solid 1px;
-  border-radius: 2px;
-  margin: 4px;
+  border: solid 11px #4285f4f7;
+  background-color: #4285f4f7;
+  border-radius: 10px;
+  color: white;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.header #signin-user-name {
+  border: solid 11px #4285f4f7;
+  border-radius: 10px;
+  background-color: #4285f4f7;
+  color: white;
 }
 
 .auth-btn {
@@ -209,6 +225,7 @@ ul.filtered-list li:nth-child(even) {
   width: 1.5em;
   height: 1.5em;
   background: #a9a9a942;
+  visibility: hidden;
 }
 
 .spreadsheet-wrapper.shrink::after {
