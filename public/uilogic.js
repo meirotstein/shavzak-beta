@@ -36,6 +36,7 @@ function onFail() {
 }
 
 function revealMainView() {
+  toggleInitLoader(false);
   document.querySelector('.main-view').style.display = 'block';
 }
 
@@ -46,8 +47,7 @@ function onSuccess(result) {
     var spidEl = document.querySelector('.spreadsheet-id');
     spidEl.classList.add('error');
     return;
-  }
-  toggleInitLoader(false);
+  }  
   loader.style.display = 'none';
   log(result);
 

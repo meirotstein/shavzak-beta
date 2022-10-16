@@ -41,9 +41,10 @@ button {
   width: 98%;
   height: 2em;
   text-align: right;
-  margin: 3px;
+  margin: 10px 3px;
   border: solid 2px;
   border-color: darkgray;
+  border-radius: 15px;
   padding-right: 5px;
 }
 
@@ -100,6 +101,7 @@ ul.filtered-list li:nth-child(even) {
 
 .calendar tr td .calendar-day {
   border: solid 1px #ccc;
+  border-radius: 15px;
   margin: 3px;
   cursor: pointer;
   position: relative;
@@ -188,6 +190,7 @@ ul.filtered-list li:nth-child(even) {
 .comment textarea {
   border: solid 2px;
   border-color: darkgray;
+  border-radius: 15px;
   width: 63%;
   margin-top: 20px;
   margin-right: 60px;
