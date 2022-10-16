@@ -11,7 +11,14 @@ var loader;
 
 // google.script.run.withSuccessHandler(onSuccess).loadData();
 
+function iniFrame() {
+  return window.self !== window.top;
+}
+
 function initLoad() {
+  if (iniFrame()) {
+    document.body.className = 'in-iframe';
+  }
   loader = document.querySelector('.main-loader');
   loader.style.display = 'inherit';
   var spidEl = document.querySelector('.spreadsheet-id');

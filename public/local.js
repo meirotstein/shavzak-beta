@@ -4,7 +4,7 @@ SpreadsheetApp = {
       this.name = name;
     }
 
-    Fetcher.prototype.getRange = async function(row, col, row_l, col_l) {
+    Fetcher.prototype.getRange = async function (row, col, row_l, col_l) {
       var that = this;
       var range;
       var renderOption;
@@ -39,7 +39,7 @@ SpreadsheetApp = {
 }
 
 window.Action = {
-  run: async function(action, callback) {
+  run: async function (action, callback) {
     var result;
     var err;
     try {
