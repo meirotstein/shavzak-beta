@@ -25,6 +25,10 @@ var signoutButton = document.getElementById('signout-button');
 var signedInUser = document.getElementById('signin-user-name');
 var initLoader = document.getElementById('init-loader');
 
+function iniFrame() {
+  return window.self !== window.top;
+}
+
 function toggleInitLoader(show) {
   if (show) {
     initLoader.style.display = 'block';
@@ -50,6 +54,9 @@ function fetchSpreadsheetId() {
 }
 
 function handleClientLoad() {
+  if (iniFrame()) {
+    document.body.className = 'in-iframe';
+  }
   // Load the API client and auth2 library
   gapi.load('client:auth2', initClient);
 }

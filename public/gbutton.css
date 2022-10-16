@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:500);
 
 .google-btn {
-  margin: 50px 30px;  
+  margin: 50px 30px;
   height: 100px;
   background-color: #4285f4;
   border-radius: 2px;
@@ -24,7 +24,7 @@
   margin-top: 11px;
   margin-right: 11px;
   width: 80px;
-    height: 80px;
+  height: 80px;
 }
 
 .google-btn .btn-text {
@@ -34,6 +34,11 @@
   font-size: 14px;
   letter-spacing: 0.2px;
   font-family: "Roboto";
+}
+
+.in-iframe .google-btn .btn-text {
+  width: 50%;
+  margin: 33px 0px;
 }
 
 .google-btn:hover {
