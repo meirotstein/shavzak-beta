@@ -8,6 +8,10 @@
   margin: 1px;
 }
 
+.in-iframe body {
+  overflow: hidden;
+}
+
 button {
   display: block;
   border: solid 11px #4285f4f7;
