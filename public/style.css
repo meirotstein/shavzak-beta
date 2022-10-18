@@ -196,6 +196,10 @@ ul.filtered-list li:nth-child(even) {
   top: 9px;
 }
 
+.in-iframe .categories input[type="radio"] {
+  top: 3px;
+}
+
 .categories label {
   line-height: 2em;
   padding-right: 2.5em;
