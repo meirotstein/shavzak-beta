@@ -30,9 +30,22 @@ function log(val) {
   console.log('%%%%%%%', val);
 }
 
-function onFail() {
+function onFail(err) {
   toggleInitLoader(false);
-  document.querySelector('.err-view').style.display = 'block';
+  var noNamesErrMsg = 'שגיאה: רשימת החיילים ריקה';
+  var defaultErrMsg = 'שגיאה: אין גישה לקובץ או שהקובץ אינו קיים';
+
+  var msg;
+  if (err === 'no_names_error') {
+    msg = noNamesErrMsg;
+  } else {
+    msg = defaultErrMsg;
+  }
+
+  let errView = document.querySelector('.err-view');
+  
+  errView.innerText = msg;
+  errView.style.display = 'block';
 }
 
 function revealMainView() {
@@ -42,7 +55,7 @@ function revealMainView() {
 
 function onSuccess(result) {
   if (result && result.error) {
-    onFail();
+    onFail(result.error);
     loader.style.display = 'none';
     var spidEl = document.querySelector('.spreadsheet-id');
     spidEl.classList.add('error');

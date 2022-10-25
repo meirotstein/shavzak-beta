@@ -71,6 +71,9 @@ async function loadData() {
   var nameRange = await MainSheet.getRange(SETTINGS.NAME_ROW_S, SETTINGS.NAME_COL, SETTINGS.NAME_ROW_L, numOfDays + 1);
   for (var i = 0; i < SETTINGS.NAME_ROW_L; ++i) {
     var values = nameRange.getValues();
+    if(!values || !values.length) {
+      throw 'no_names_error';
+    }
     var name = values[i] && values[i][0];
     if (name) {
       var presence = values[i].slice(1);
