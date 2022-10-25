@@ -11,7 +11,7 @@ var loader;
 
 // google.script.run.withSuccessHandler(onSuccess).loadData();
 
-function initLoad() {  
+function initLoad() {
   loader = document.querySelector('.main-loader');
   loader.style.display = 'inherit';
   var spidEl = document.querySelector('.spreadsheet-id');
@@ -22,7 +22,7 @@ function initLoad() {
   } else {
     spidEl.classList.add('error');
     onFail();
-  }  
+  }
 }
 
 
@@ -31,6 +31,7 @@ function log(val) {
 }
 
 function onFail(err) {
+  console.log('fail to load', err);
   toggleInitLoader(false);
   var noNamesErrMsg = 'שגיאה: רשימת החיילים ריקה';
   var defaultErrMsg = 'שגיאה: אין גישה לקובץ או שהקובץ אינו קיים';
@@ -43,7 +44,7 @@ function onFail(err) {
   }
 
   let errView = document.querySelector('.err-view');
-  
+
   errView.innerText = msg;
   errView.style.display = 'block';
 }
@@ -60,7 +61,7 @@ function onSuccess(result) {
     var spidEl = document.querySelector('.spreadsheet-id');
     spidEl.classList.add('error');
     return;
-  }  
+  }
   loader.style.display = 'none';
   log(result);
 
@@ -89,6 +90,13 @@ function onSuccess(result) {
 
 function initView() {
 
+  var meta = getMeta();
+
+  if (meta) {
+    var titleEl = document.querySelector('.spreadsheet-title');
+    titleEl.textContent = getMeta().properties.title;
+  }
+
   var categoriesEl = document.querySelector('.categories');
   var commentEl = document.querySelector('.comment');
 
@@ -106,7 +114,7 @@ function initView() {
       dayTD.appendChild(dayEL);
       dayEL.innerHTML =
         '<div class="date">' + day.getDate() + '/' + (day.getMonth() + 1) + '</div>' +
-        '<div class="amount">' + categories[DEF_CAT][idx + daysIdxOffset] + '</div>' + 
+        '<div class="amount">' + categories[DEF_CAT][idx + daysIdxOffset] + '</div>' +
         `<img style="display:none;" class="loader" src="loading.svg"></img>`;
 
       dayEL.onclick = togglePresence.bind(this, this.dates.indexOf(day), undefined);
@@ -259,9 +267,9 @@ function applyPresence(sData) {
   }
 }
 
-function fixPresence(sData) {   
+function fixPresence(sData) {
   if (sData.presence && sData.presence.length < dates.length) {
-    for (var i = sData.presence.length; i < dates.length ; ++i) {
+    for (var i = sData.presence.length; i < dates.length; ++i) {
       sData.presence[i] = "";
     }
   }
@@ -304,7 +312,7 @@ function togglePresence(dayIdx, p) {
   } else {
     atHomeChange = 0;
   }
-  
+
 
   dayEls[dayIdx].querySelector('.loader').style.display = 'inherit';
   // google.script.run.withSuccessHandler(onPresenceSave.bind(this, dayIdx, cat, countChange)).setPresenceData(selectedSoldier.idx, dayIdx + 1, newPresence);

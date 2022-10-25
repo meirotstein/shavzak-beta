@@ -87,8 +87,8 @@ button {
   z-index: 999;
 }
 
-.in-iframe .filtered-list-c {  
-  width: 92%;  
+.in-iframe .filtered-list-c {
+  width: 92%;
   top: 5em;
   margin-right: 0px;
 }
@@ -295,4 +295,11 @@ ul.filtered-list li:nth-child(even) {
   top: -2px;
   left: -2px;
   font-size: 55px;
+}
+
+.spreadsheet-title {
+  position: fixed;
+  width: 100%;
+  bottom: 10px;
+  text-align: center;
 }

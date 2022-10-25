@@ -111,6 +111,18 @@ function handleSignoutClick(event) {
   location.reload();
 }
 
+function makeGetSpreadsheetCall() {
+  return gapi.client.sheets.spreadsheets.get({
+    spreadsheetId: spreadsheetId
+  }).then(function (resp) {
+    var r = JSON.parse(resp.body);
+    console.log(r);
+    return r;
+  }).catch(function (err) {
+    throw { error: err.body };
+  });
+}
+
 function makeApiGetCall(sheet, range, renderOption) {
   return gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: spreadsheetId,

@@ -1,4 +1,9 @@
 SpreadsheetApp = {
+
+  getMetadata: async function() {
+    return await makeGetSpreadsheetCall();
+  },
+  
   getActive: function () {
     var Fetcher = function (name) {
       this.name = name;

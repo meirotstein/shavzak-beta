@@ -1,4 +1,5 @@
 var SETTINGS = {};
+var METADATA;
 
 var data = {
   sList: [],
@@ -22,6 +23,9 @@ function showManagementDialog() {
 }
 
 async function initSettings() {
+  
+  METADATA = await SpreadsheetApp.getMetadata();
+
   var presenceSettingsRange = await SettingsSheet.getRange(1, 2, 40);
   var presenceSettings = presenceSettingsRange.getValues().map(function (val) { return val[0] });
 
@@ -141,6 +145,10 @@ async function setCommentData(rowIdx, value) {
   if (range) {
     return range.setValue(value);
   }
+}
+
+function getMeta() {
+  return METADATA;
 }
 
 function foo() {
