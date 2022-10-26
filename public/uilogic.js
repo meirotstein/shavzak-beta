@@ -55,6 +55,9 @@ function revealMainView() {
 }
 
 function onSuccess(result) {
+
+  showTitleIfApplicable();
+  
   if (result && result.error) {
     onFail(result.error);
     loader.style.display = 'none';
@@ -88,14 +91,16 @@ function onSuccess(result) {
 
 }
 
-function initView() {
-
+function showTitleIfApplicable() {
   var meta = getMeta();
 
-  if (meta) {
+  if (meta && meta.properties) {
     var titleEl = document.querySelector('.spreadsheet-title');
-    titleEl.textContent = getMeta().properties.title;
+    titleEl.textContent = meta.properties.title;
   }
+}
+
+function initView() { 
 
   var categoriesEl = document.querySelector('.categories');
   var commentEl = document.querySelector('.comment');
