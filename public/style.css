@@ -142,6 +142,9 @@ ul.filtered-list li:nth-child(even) {
   margin: 3px;
   cursor: pointer;
   position: relative;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .in-iframe .calendar tr td .calendar-day {
