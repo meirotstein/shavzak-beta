@@ -122,8 +122,23 @@ function initView() {
         '<div class="amount">' + categories[DEF_CAT][idx + daysIdxOffset] + '</div>' +
         `<img style="display:none;" class="loader" src="loading.svg"></img>`;
 
-      dayEL.onclick = togglePresence.bind(this, this.dates.indexOf(day), undefined);
-      dayEL.oncontextmenu = togglePresence.bind(this, this.dates.indexOf(day), '');
+      if (isiOS()) {
+        console.log('iOS events');
+        var timer = {};
+        dayEL.ontouchstart = (function(index) { 
+          timer[index] = Date.now();
+        }).bind(this, idx);
+        dayEL.ontouchend = (function(index) { 
+          if (Date.now() - timer[index] < 500) {
+            togglePresence( this.dates.indexOf(day), undefined);
+          } else {
+            togglePresence( this.dates.indexOf(day), '');
+          }
+         }).bind(this, idx)
+      } else {
+        dayEL.onclick = togglePresence.bind(this, this.dates.indexOf(day), undefined);
+        dayEL.oncontextmenu = togglePresence.bind(this, this.dates.indexOf(day), '');  
+      }
 
       week.appendChild(dayTD);
       dayEls.push(dayEL);
