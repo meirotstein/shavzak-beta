@@ -57,7 +57,7 @@ function revealMainView() {
 function onSuccess(result) {
 
   showTitleIfApplicable();
-  
+
   if (result && result.error) {
     onFail(result.error);
     loader.style.display = 'none';
@@ -100,7 +100,7 @@ function showTitleIfApplicable() {
   }
 }
 
-function initView() { 
+function initView() {
 
   var categoriesEl = document.querySelector('.categories');
   var commentEl = document.querySelector('.comment');
@@ -125,19 +125,19 @@ function initView() {
       if (isiOS()) {
         console.log('iOS events');
         var timer = {};
-        dayEL.ontouchstart = (function(index) { 
+        dayEL.ontouchstart = (function (index) {
           timer[index] = Date.now();
         }).bind(this, idx);
-        dayEL.ontouchend = (function(index) { 
+        dayEL.ontouchend = (function (index) {
           if (Date.now() - timer[index] < 500) {
-            togglePresence( this.dates.indexOf(day), undefined);
+            togglePresence(this.dates.indexOf(day), undefined);
           } else {
-            togglePresence( this.dates.indexOf(day), '');
+            togglePresence(this.dates.indexOf(day), '');
           }
-         }).bind(this, idx)
+        }).bind(this, idx)
       } else {
         dayEL.onclick = togglePresence.bind(this, this.dates.indexOf(day), undefined);
-        dayEL.oncontextmenu = togglePresence.bind(this, this.dates.indexOf(day), '');  
+        dayEL.oncontextmenu = togglePresence.bind(this, this.dates.indexOf(day), '');
       }
 
       week.appendChild(dayTD);
@@ -227,7 +227,9 @@ function filterList(value) {
 }
 
 function selectSoldier(evt) {
-  var idx = evt.target.parentNode.getAttribute('data-idx');
+  var idx =
+    evt.target.getAttribute('data-idx') ||          // li
+    evt.target.parentNode.getAttribute('data-idx'); // li > span
   var list = document.querySelector('.filtered-list');
   var bar = document.querySelector('.search-bar');
   var commentTA = document.querySelector('.comment textarea');
