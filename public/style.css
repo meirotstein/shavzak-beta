@@ -110,6 +110,9 @@ ul.filtered-list li {
   height: 2.5em;
   line-height: 2.5em;
   cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 ul.filtered-list li>span {
