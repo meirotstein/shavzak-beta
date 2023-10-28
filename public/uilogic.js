@@ -3,6 +3,8 @@ var AT_HOME_CAT = 'בחופש';
 var data;
 var dates = [];
 var dayEls = [];
+var weeksEls = [];
+var currentVisibleMonth = (new Date()).getMonth();
 var categories = {};
 var selectedSoldier;
 var selectedCategory = DEF_CAT;
@@ -28,6 +30,14 @@ function initLoad() {
 
 function log(val) {
   console.log('%%%%%%%', val);
+}
+
+function isToday(date) {
+  if (!date) return;
+  var today = new Date();
+  return today.getDate() === date.getDate() &&
+    today.getMonth() === date.getMonth() &&
+    today.getFullYear() === date.getFullYear();
 }
 
 function onFail(err) {
@@ -102,19 +112,42 @@ function showTitleIfApplicable() {
 
 function initView() {
 
+  var today = new Date();
+
   var categoriesEl = document.querySelector('.categories');
   var commentEl = document.querySelector('.comment');
+  var prevEl = document.querySelector('.days-page .prev');
+  var nextEl = document.querySelector('.days-page .next');
 
-  function addCalendarWeek(days, weekNum) {
+  prevEl.onclick = function () {
+    --currentVisibleMonth;
+    setWeeksVisibility();
+  }
+
+  nextEl.onclick = function () {
+    ++currentVisibleMonth;
+    setWeeksVisibility();
+  }
+
+  function addCalendarWeek(days, weekNum, weekOffset) {
     var calendar = document.querySelector('.calendar tbody');
     var week = document.createElement('tr');
+    weeksEls.push(week);
     var daysIdxOffset = (weekNum || 0) * 7;
+    if (weekNum !== 0 && weekOffset) {
+      daysIdxOffset -= weekOffset;
+    }
     week.className = 'calendar-week';
+    week.setAttribute('data-month', days[0].getMonth());
 
     days.forEach(function (day, idx) {
       var dayTD = document.createElement('td');
       var dayEL = document.createElement('div');
       dayEL.className = 'calendar-day';
+      if (isToday(day)) {
+        dayEL.className += ' today';
+      }
+
 
       dayTD.appendChild(dayEL);
       dayEL.innerHTML =
@@ -148,12 +181,16 @@ function initView() {
     if (days.length < 7 && days[0].getDay() !== 0) {
       var i = 0;
       while (i++ < days[0].getDay()) {
-        var dayEL = document.createElement('div');
+        var dayEL = document.createElement('td');
         week.insertBefore(dayEL, week.firstChild);
       }
     }
 
     calendar.appendChild(week);
+    if (days.length < 7) {
+      return 7 - days.length;
+    }
+    return weekOffset;
   }
 
   function addCategory(label) {
@@ -181,18 +218,43 @@ function initView() {
     categoriesEl.appendChild(wrapper);
   }
 
+  function setWeeksVisibility() {
+    weeksEls.forEach(function (week) {
+      if (parseInt(week.getAttribute('data-month')) === currentVisibleMonth) {
+        week.classList.remove('hide');
+      } else {
+        week.classList.add('hide');
+      }
+    })
+
+    if (currentVisibleMonth === parseInt(weeksEls[0].getAttribute('data-month'))){
+      prevEl.classList.add('hide');
+    } else {
+      prevEl.classList.remove('hide');
+    }
+
+    if (currentVisibleMonth === parseInt(weeksEls[weeksEls.length - 1].getAttribute('data-month'))){
+      nextEl.classList.add('hide');
+    } else {
+      nextEl.classList.remove('hide');
+    }
+  }
+
   var week = [];
   var currIdx = 0;
   var weekNum = 0;
+  var weekOffset = 0;
 
   while (this.dates[currIdx]) {
     week.push(this.dates[currIdx]);
     if (this.dates[currIdx].getDay() === 6 || currIdx === this.dates.length - 1) {
-      addCalendarWeek(week, weekNum++);
+      weekOffset = addCalendarWeek(week, weekNum++, weekOffset);
       week = [];
     }
     ++currIdx;
   }
+
+  setWeeksVisibility();
 
   for (var name in categories) {
     addCategory(name);

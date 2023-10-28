@@ -12,6 +12,10 @@
   overflow: hidden;
 }
 
+.hide {
+  display: none;
+}
+
 button {
   display: block;
   border: solid 11px #4285f4f7;
@@ -147,6 +151,10 @@ ul.filtered-list li:nth-child(even) {
   user-select: none; /* Standard syntax */
 }
 
+.calendar tr td .calendar-day.today {
+  border: solid 5px #5555d4;
+}
+
 .in-iframe .calendar tr td .calendar-day {
   border-radius: 3px;
   margin: 0;
@@ -180,6 +188,17 @@ ul.filtered-list li:nth-child(even) {
 
 .calendar tr td .calendar-day.off {
   background: #ffe599;
+}
+
+.days-pages {
+  display: flex;
+  justify-content: space-between;
+}
+
+.days-pages .days-page {
+  margin: 10px;
+  cursor: pointer;
+  color: #5555d4;
 }
 
 .categories {
