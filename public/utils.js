@@ -99,3 +99,8 @@ function isiOS() {
   // iPad on iOS 13 detection
   || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }
+
+function isLastDayOfMonth(date) {
+  var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  return lastDay.getDate() === date.getDate();
+}

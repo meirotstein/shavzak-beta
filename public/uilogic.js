@@ -188,7 +188,7 @@ function initView() {
 
     calendar.appendChild(week);
     if (days.length < 7) {
-      return 7 - days.length;
+      return weekOffset + (7 - days.length);
     }
     return weekOffset;
   }
@@ -247,7 +247,7 @@ function initView() {
 
   while (this.dates[currIdx]) {
     week.push(this.dates[currIdx]);
-    if (this.dates[currIdx].getDay() === 6 || currIdx === this.dates.length - 1) {
+    if (this.dates[currIdx].getDay() === 6 || isLastDayOfMonth(this.dates[currIdx]) || currIdx === this.dates.length - 1) {
       weekOffset = addCalendarWeek(week, weekNum++, weekOffset);
       week = [];
     }
