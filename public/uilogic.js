@@ -412,17 +412,28 @@ function updatePresenceUI(dayIdx, presence) {
     case '0':
       // day off
       el.classList.remove('present');
+      el.classList.remove('sick');
       el.classList.add('off');
       break;
     case 1:
     case '1':
       // present
-      el.classList.add('present');
       el.classList.remove('off');
+      el.classList.remove('sick');
+      el.classList.add('present');
+
+      break;
+    case 2:
+    case '2':
+      // sick (betim/gimelim)
+      el.classList.remove('off');
+      el.classList.remove('present');
+      el.classList.add('sick');
       break;
     default:
       el.classList.remove('present');
       el.classList.remove('off');
+      el.classList.remove('sick');
   }
 }
 

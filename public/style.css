@@ -189,6 +189,10 @@ ul.filtered-list li:nth-child(even) {
   background: #b6d7a8;
 }
 
+.calendar tr td .calendar-day.sick {
+  background: #F4CCCC;
+}
+
 .calendar tr td .calendar-day.off {
   background: #ffe599;
 }
