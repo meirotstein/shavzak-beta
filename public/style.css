@@ -56,6 +56,12 @@ button {
   margin-left: 7px;
 }
 
+.action_btn {
+  margin: 10px;
+  cursor: pointer;
+  color: #5555d4;
+}
+
 .err-view {
   font-size: 45px;
   text-align: center;
@@ -202,12 +208,6 @@ ul.filtered-list li:nth-child(even) {
   justify-content: space-between;
 }
 
-.days-pages .days-page {
-  margin: 10px;
-  cursor: pointer;
-  color: #5555d4;
-}
-
 .categories {
   width: 5em;
   float: right;
@@ -281,6 +281,13 @@ ul.filtered-list li:nth-child(even) {
 
 .comment textarea.save-error {
   border: solid red;
+}
+
+.daily-view label {
+  text-align: center;
+  display: block;
+  padding-top: 34px;
+  text-decoration: underline;
 }
 
 .spreadsheet-wrapper {
