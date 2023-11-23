@@ -104,3 +104,7 @@ function isLastDayOfMonth(date) {
   var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
   return lastDay.getDate() === date.getDate();
 }
+
+function getDaysBetween(startTs, endTs) {
+  return Math.round(Math.abs((endTs - startTs) / (1000 * 3600 * 24)));
+}

@@ -478,6 +478,97 @@ function onPresenceSave(dayIdx, cat, countChange, atHomeChange, result) {
   }
 }
 
+function getPresenceModel(date) {
+  var daysBetween = getDaysBetween(data.startDate, date.getTime());
+  var dayIdx = daysBetween - 1;
+
+  var dailyPresence = {};
+
+  data.sList.forEach(function (soldier) {
+    var description = soldier.name;
+    var regex = /^(.*?)\s*\[.*?\]\s*(.*)$/;
+
+    var match = description.match(regex);
+
+    var name = match[1].trim();
+    var platoon = match[2].trim();
+
+    dailyPresence[platoon] = dailyPresence[platoon] || {};
+    dailyPresence[platoon].presence = dailyPresence[platoon].presence || [];
+    dailyPresence[platoon].home = dailyPresence[platoon].home || [];
+    dailyPresence[platoon].sick = dailyPresence[platoon].sick || [];
+
+    var presence = soldier.presence[dayIdx] + "";
+    if (presence === '1') {
+      dailyPresence[platoon].presence.push(name);
+    } else if (presence === '0') {
+      dailyPresence[platoon].home.push(name);
+    } else if (presence === '2') {
+      dailyPresence[platoon].sick.push(name);
+    }
+  });
+
+  return dailyPresence;
+}
+
+function createPlatoonView(platoon, dailyPresence, idx) {
+  var platoonViewEl = document.createElement('div');
+  platoonViewEl.className = 'platoon-view';
+
+  platoonViewEl.innerHTML = 
+    `<div class="head">
+      <label>${platoon}</label>
+      <label class="presence-len">${dailyPresence[platoon].presence.length}</label>
+      <label class="action_btn" onclick="showPlatoonPresenceList(${idx})">הצג רשימה</label>
+    </div>
+    <div class="platoon-presence platoon-presence_${idx} hide">
+      <ul class="presence-list">
+        ${
+          function() {
+            var lis = '';
+            dailyPresence[platoon].presence.forEach(function(name) {
+              lis += `<li>${name}</li>`;
+            })
+            return lis;
+          }()
+        }
+      </ul>
+    </div>
+  `
+  return platoonViewEl;
+}
+
+function showPresenceModal() {
+  var currentDate = new Date();
+
+  var dailyPresence = getPresenceModel(currentDate);
+
+  var dailyModalEl = document.querySelector('.daily-view-modal');
+  var dailyModalTitleEl = document.querySelector('.daily-view-modal .title');
+  dailyModalTitleEl.innerText = `נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}`;
+  var dailyModalListsEl = document.querySelector('.daily-view-modal .lists');
+  dailyModalListsEl.innerHTML = '';
+
+  var count = 0;
+  for (var platoon in dailyPresence) {
+    ++count;
+    var platoonViewEl = createPlatoonView(platoon, dailyPresence, count);
+    dailyModalListsEl.appendChild(platoonViewEl);
+  }
+
+  dailyModalEl.classList.remove('hide');
+}
+
+function showPlatoonPresenceList(platoonIdx) {
+  var platoonViewEl = document.querySelector(`.platoon-presence_${platoonIdx}`);
+  platoonViewEl.classList.toggle('hide');
+}
+
+function hidePresenceModal() {
+  var dailyModalEl = document.querySelector('.daily-view-modal');
+  dailyModalEl.classList.add('hide');
+}
+
 function clearSearchbarValue() {
   document.querySelector('.search-bar').value = '';
 }

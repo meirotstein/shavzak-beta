@@ -64,7 +64,12 @@
       <textarea disabled onblur="saveComment()"></textarea>
     </div>
     <div class="daily-view">
-      <label class="action_btn">נוכחות יומית</label>
+      <label class="action_btn" onclick="showPresenceModal()">נוכחות יומית</label>
+      <div class="daily-view-modal hide">
+        <label class="title"></label>
+        <span class="close-btn" onclick="hidePresenceModal()">&#x2715</span>
+        <div class="lists"></div>
+      </div>
     </div>
    
     <img style="display:none;" class="main-loader" src="loading.svg">
