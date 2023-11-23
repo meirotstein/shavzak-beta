@@ -169,6 +169,11 @@ ul.filtered-list li:nth-child(even) {
   margin: 0;
 }
 
+.in-iframe .calendar tr td .calendar-day.today {
+  border: solid 2px #5555d4;
+
+}
+
 .calendar tr td .calendar-day.save-error {
   border: solid red;
   background: burlywood !important;
@@ -288,6 +293,10 @@ ul.filtered-list li:nth-child(even) {
   display: block;
   padding-top: 34px;
   text-decoration: underline;
+}
+
+.in-iframe .daily-view .action_btn {
+  display: none;
 }
 
 .daily-view .daily-view-modal {
