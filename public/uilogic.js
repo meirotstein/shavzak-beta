@@ -480,7 +480,7 @@ function onPresenceSave(dayIdx, cat, countChange, atHomeChange, result) {
 
 function getPresenceModel(date) {
   var daysBetween = getDaysBetween(data.startDate, date.getTime());
-  var dayIdx = daysBetween - 1;
+  var dayIdx = daysBetween;
 
   var dailyPresence = {};
 
