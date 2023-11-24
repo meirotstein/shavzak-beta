@@ -366,7 +366,6 @@ ul.filtered-list li:nth-child(even) {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding: 0 20px;
   text-align: center;
 }
 
