@@ -106,5 +106,5 @@ function isLastDayOfMonth(date) {
 }
 
 function getDaysBetween(startTs, endTs) {
-  return Math.round(Math.abs((endTs - startTs) / (1000 * 3600 * 24)));
+  return Math.floor(Math.abs((endTs - startTs) / (1000 * 3600 * 24)));
 }
