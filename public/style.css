@@ -296,7 +296,7 @@ ul.filtered-list li:nth-child(even) {
 }
 
 .in-iframe .daily-view .action_btn {
-  display: none;
+  padding-top: inherit;
 }
 
 .daily-view .daily-view-modal {
@@ -308,10 +308,15 @@ ul.filtered-list li:nth-child(even) {
   z-index: 999;
   top: 10px;
   border-radius: 5px;
+  overflow: auto;
 }
 
-.daily-view .daily-view-modal {
-  overflow: auto;
+.in-iframe .daily-view .daily-view-modal {
+  border: 2px solid;
+  top: 2px;
+  right: 1px;
+  height: calc(100% - 10px);
+  width: calc(100% - 8px);
 }
 
 .daily-view .daily-view-modal .title {
@@ -325,6 +330,12 @@ ul.filtered-list li:nth-child(even) {
   border-bottom: 1px solid;
 }
 
+.in-iframe .daily-view .daily-view-modal .title {
+  font-size: 20px;
+  margin-top: 10px;
+  margin-top: 10px;
+}
+
 .daily-view .daily-view-modal .close-btn {
   position: absolute;
   top: 23px;
@@ -334,11 +345,22 @@ ul.filtered-list li:nth-child(even) {
   cursor: pointer;
 }
 
+.in-iframe .daily-view-modal .close-btn {
+  top: 7px;
+  font-size: 23px;
+  left: 13px;
+}
+
+
 .daily-view .daily-view-modal .platoon-view .head {
   padding: 20px 35px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   border-bottom: 1px solid;
+}
+
+.in-iframe .daily-view .daily-view-modal .platoon-view .head {
+  padding: 7px 7px;
 }
 
 .daily-view .daily-view-modal .platoon-view .sub-head {
