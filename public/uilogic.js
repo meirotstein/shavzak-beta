@@ -522,6 +522,9 @@ function createPlatoonView(platoon, dailyPresence, idx) {
       <label class="action_btn" onclick="showPlatoonPresenceList(${idx})">הצג רשימה</label>
     </div>
     <div class="platoon-presence platoon-presence_${idx} hide">
+      <div class="sub-head">
+        <label>נוכחים</label>
+      </div>
       <ul class="presence-list">
         ${
           function() {
@@ -533,6 +536,50 @@ function createPlatoonView(platoon, dailyPresence, idx) {
           }()
         }
       </ul>
+      ${
+        function() {
+          if (dailyPresence[platoon].home.length) {
+            return `
+              <div class="sub-head">
+                <label>בחופשה (${dailyPresence[platoon].home.length})</label>
+              </div>
+              <ul class="presence-list">
+                ${
+                  function() {
+                    var lis = '';
+                    dailyPresence[platoon].home.forEach(function(name) {
+                      lis += `<li>${name}</li>`;
+                    })
+                    return lis;
+                  }()
+                }
+              </ul>`
+          }
+          return '';
+        }()
+      }
+      ${
+        function() {
+          if (dailyPresence[platoon].sick.length) {
+            return `
+              <div class="sub-head">
+                <label>במחלה (${dailyPresence[platoon].sick.length})</label>
+              </div>
+              <ul class="presence-list">
+                ${
+                  function() {
+                    var lis = '';
+                    dailyPresence[platoon].sick.forEach(function(name) {
+                      lis += `<li>${name}</li>`;
+                    })
+                    return lis;
+                  }()
+                }
+              </ul>`
+          }
+          return '';
+        }()
+      }
     </div>
   `
   return platoonViewEl;

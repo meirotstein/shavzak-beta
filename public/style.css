@@ -321,7 +321,8 @@ ul.filtered-list li:nth-child(even) {
   margin-top: 20px;
   font-size: 55px;
   font-weight: bold;
-  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid;
 }
 
 .daily-view .daily-view-modal .close-btn {
@@ -337,7 +338,20 @@ ul.filtered-list li:nth-child(even) {
   padding: 20px 35px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  border: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.daily-view .daily-view-modal .platoon-view .sub-head {
+  list-style-type: none;
+  width: 100%;
+  height: 2.5em;
+  line-height: 2.5em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+  background: #000000b8;
+  color: white;
 }
 
 .daily-view .daily-view-modal .platoon-view .head .presence-len {
@@ -356,6 +370,7 @@ ul.filtered-list li:nth-child(even) {
   margin: 0;
   text-align: right;
   background: white;
+  border-bottom: 1px solid;
 }
 
 .daily-view .daily-view-modal .platoon-view ul.presence-list li {
