@@ -356,9 +356,6 @@ ul.filtered-list li:nth-child(even) {
   top: 15px;
   right: 15px;
   cursor: pointer;
-  
-  width: 100px;
-  height: 100px;
 }
 
 .in-iframe .daily-view-modal .whatsapp-btn {

@@ -643,7 +643,7 @@ function sharePresenceOnWhatsapp() {
         var platoonLst = 
         `*[${platoon.length === 1 ? 'מחלקה' : 'מחלקת'} ${platoon}]*${whatsappNewline}${whatsappNewline}${
           function() {
-            var lis = `*_נוכחים_ (${dailyPresence[platoon].presence.length})*${whatsappNewline}`;
+            var lis = `*_נוכחים (${dailyPresence[platoon].presence.length})_*${whatsappNewline}`;
             dailyPresence[platoon].presence.forEach(function(name) {
               lis += `${name}${whatsappNewline}`;
             })
@@ -652,7 +652,7 @@ function sharePresenceOnWhatsapp() {
         }${
           function() {
             if (dailyPresence[platoon].home.length) {
-              var lis = `*_בחופשה_ (${dailyPresence[platoon].home.length})*${whatsappNewline}`;
+              var lis = `*_בחופשה (${dailyPresence[platoon].home.length})_*${whatsappNewline}`;
               dailyPresence[platoon].home.forEach(function(name) {
                 lis += `${name}${whatsappNewline}`;
               })
@@ -663,7 +663,7 @@ function sharePresenceOnWhatsapp() {
         }${
           function() {
             if (dailyPresence[platoon].sick.length) {
-              var lis = `*_במחלה_ (${dailyPresence[platoon].sick.length})*${whatsappNewline}`;
+              var lis = `*_במחלה (${dailyPresence[platoon].sick.length})_*${whatsappNewline}`;
               dailyPresence[platoon].sick.forEach(function(name) {
                 lis += `${name}${whatsappNewline}`;
               })
