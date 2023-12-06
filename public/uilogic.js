@@ -482,8 +482,13 @@ function getPresenceModel(date) {
   var daysBetween = getDaysBetween(data.startDate, date.getTime());
   var dayIdx = daysBetween;
 
-  var dailyPresence = {};
-
+  var dailyPresence = {
+    totalPresence: 0,
+    totalHome: 0,
+    totalSick: 0,
+    platoons: new Set(),
+  };
+  
   data.sList.forEach(function (soldier) {
     var description = soldier.name;
     var regex = /^(.*?)\s*\[.*?\]\s*(.*)$/;
@@ -492,6 +497,7 @@ function getPresenceModel(date) {
 
     var name = match[1].trim();
     var platoon = match[2].trim();
+    dailyPresence.platoons.add(platoon);
 
     dailyPresence[platoon] = dailyPresence[platoon] || {};
     dailyPresence[platoon].presence = dailyPresence[platoon].presence || [];
@@ -501,10 +507,13 @@ function getPresenceModel(date) {
     var presence = soldier.presence[dayIdx] + "";
     if (presence === '1') {
       dailyPresence[platoon].presence.push(name);
+      ++dailyPresence.totalPresence;
     } else if (presence === '0') {
       dailyPresence[platoon].home.push(name);
+      ++dailyPresence.totalHome;
     } else if (presence === '2') {
       dailyPresence[platoon].sick.push(name);
+      ++dailyPresence.totalSick;
     }
   });
 
@@ -597,7 +606,7 @@ function showPresenceModal() {
   dailyModalListsEl.innerHTML = '';
 
   var count = 0;
-  for (var platoon in dailyPresence) {
+  for (var platoon of dailyPresence.platoons) {
     ++count;
     var platoonViewEl = createPlatoonView(platoon, dailyPresence, count);
     dailyModalListsEl.appendChild(platoonViewEl);
@@ -614,6 +623,65 @@ function showPlatoonPresenceList(platoonIdx) {
 function hidePresenceModal() {
   var dailyModalEl = document.querySelector('.daily-view-modal');
   dailyModalEl.classList.add('hide');
+}
+
+function sharePresenceOnWhatsapp() {
+  var currentDate = new Date();
+
+  var dailyPresence = getPresenceModel(currentDate);
+  var whatsappNewline = '%0a';
+
+  var msg = `*נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}*${
+    whatsappNewline + whatsappNewline
+  }${
+    `סהכ נוכחים ${dailyPresence.totalPresence}${whatsappNewline}סהכ בחופשה ${dailyPresence.totalHome}${whatsappNewline}סהכ במחלה ${dailyPresence.totalSick}${whatsappNewline}${whatsappNewline}`
+  }
+  ${
+    function() {
+      var companyLst = '';
+      for (var platoon of dailyPresence.platoons) {
+        var platoonLst = 
+        `*[${platoon.length === 1 ? 'מחלקה' : 'מחלקת'} ${platoon}]*${whatsappNewline}${
+          function() {
+            var lis = `_נוכחים_ (${dailyPresence[platoon].presence.length})${whatsappNewline}`;
+            dailyPresence[platoon].home.forEach(function(name) {
+              lis += `${name}${whatsappNewline}`;
+            })
+            return lis;
+          }()
+        }${
+          function() {
+            if (dailyPresence[platoon].home.length) {
+              var lis = `_בחופשה_ (${dailyPresence[platoon].home.length})${whatsappNewline}`;
+              dailyPresence[platoon].home.forEach(function(name) {
+                lis += `${name}${whatsappNewline}`;
+              })
+              return lis;
+            }
+            return '';
+          }()
+        }${
+          function() {
+            if (dailyPresence[platoon].sick.length) {
+              var lis = `_במחלה_ (${dailyPresence[platoon].sick.length})${whatsappNewline}`;
+              dailyPresence[platoon].sick.forEach(function(name) {
+                lis += `${name}${whatsappNewline}`;
+              })
+              return lis;
+            }
+            return '';
+          }()
+        }`
+
+        companyLst += `${platoonLst}${whatsappNewline}`;
+      }
+      return companyLst;
+    }()
+  }`
+
+  var whatsapp_url = `whatsapp://send?text=${msg}`;
+  console.log(whatsapp_url);
+  window.location.href = whatsapp_url;
 }
 
 function clearSearchbarValue() {

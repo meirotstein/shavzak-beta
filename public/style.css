@@ -326,7 +326,7 @@ ul.filtered-list li:nth-child(even) {
   margin-top: 20px;
   font-size: 55px;
   font-weight: bold;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
   border-bottom: 1px solid;
 }
 
@@ -338,7 +338,7 @@ ul.filtered-list li:nth-child(even) {
 
 .daily-view .daily-view-modal .close-btn {
   position: absolute;
-  top: 23px;
+  top: 20px;
   font-size: 60px;
   left: 35px;
   font-weight: bold;
@@ -351,6 +351,23 @@ ul.filtered-list li:nth-child(even) {
   left: 13px;
 }
 
+.daily-view .daily-view-modal .whatsapp-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  
+  width: 100px;
+  height: 100px;
+}
+
+.in-iframe .daily-view-modal .whatsapp-btn {
+  display: none;
+}
+
+.daily-view .daily-view-modal .whatsapp-btn .whatsapp-icon {
+  width: 80px;
+}
 
 .daily-view .daily-view-modal .platoon-view .head {
   padding: 20px 35px;
