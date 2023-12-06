@@ -644,7 +644,7 @@ function sharePresenceOnWhatsapp() {
         `*[${platoon.length === 1 ? 'מחלקה' : 'מחלקת'} ${platoon}]*${whatsappNewline}${whatsappNewline}${
           function() {
             var lis = `*_נוכחים_ (${dailyPresence[platoon].presence.length})*${whatsappNewline}`;
-            dailyPresence[platoon].home.forEach(function(name) {
+            dailyPresence[platoon].presence.forEach(function(name) {
               lis += `${name}${whatsappNewline}`;
             })
             return `${lis}${whatsappNewline}`;
