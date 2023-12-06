@@ -634,40 +634,40 @@ function sharePresenceOnWhatsapp() {
   var msg = `*נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}*${
     whatsappNewline + whatsappNewline
   }${
-    `סהכ נוכחים ${dailyPresence.totalPresence}${whatsappNewline}סהכ בחופשה ${dailyPresence.totalHome}${whatsappNewline}סהכ במחלה ${dailyPresence.totalSick}${whatsappNewline}${whatsappNewline}`
+    `סהכ נוכחים: ${dailyPresence.totalPresence}${whatsappNewline}סהכ בחופשה: ${dailyPresence.totalHome}${whatsappNewline}סהכ במחלה: ${dailyPresence.totalSick}${whatsappNewline}${whatsappNewline}`
   }
   ${
     function() {
       var companyLst = '';
       for (var platoon of dailyPresence.platoons) {
         var platoonLst = 
-        `*[${platoon.length === 1 ? 'מחלקה' : 'מחלקת'} ${platoon}]*${whatsappNewline}${
+        `*[${platoon.length === 1 ? 'מחלקה' : 'מחלקת'} ${platoon}]*${whatsappNewline}${whatsappNewline}${
           function() {
-            var lis = `_נוכחים_ (${dailyPresence[platoon].presence.length})${whatsappNewline}`;
+            var lis = `*_נוכחים_ (${dailyPresence[platoon].presence.length})*${whatsappNewline}`;
             dailyPresence[platoon].home.forEach(function(name) {
               lis += `${name}${whatsappNewline}`;
             })
-            return lis;
+            return `${lis}${whatsappNewline}`;
           }()
         }${
           function() {
             if (dailyPresence[platoon].home.length) {
-              var lis = `_בחופשה_ (${dailyPresence[platoon].home.length})${whatsappNewline}`;
+              var lis = `*_בחופשה_ (${dailyPresence[platoon].home.length})*${whatsappNewline}`;
               dailyPresence[platoon].home.forEach(function(name) {
                 lis += `${name}${whatsappNewline}`;
               })
-              return lis;
+              return `${lis}${whatsappNewline}`;
             }
             return '';
           }()
         }${
           function() {
             if (dailyPresence[platoon].sick.length) {
-              var lis = `_במחלה_ (${dailyPresence[platoon].sick.length})${whatsappNewline}`;
+              var lis = `*_במחלה_ (${dailyPresence[platoon].sick.length})*${whatsappNewline}`;
               dailyPresence[platoon].sick.forEach(function(name) {
                 lis += `${name}${whatsappNewline}`;
               })
-              return lis;
+              return `${lis}${whatsappNewline}`;
             }
             return '';
           }()
