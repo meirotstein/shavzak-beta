@@ -603,6 +603,16 @@ function showPresenceModal() {
   var dailyModalTitleEl = document.querySelector('.daily-view-modal .title');
   dailyModalTitleEl.innerText = `נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}`;
   var dailyModalListsEl = document.querySelector('.daily-view-modal .lists');
+  var dailyModalSubTitleEl = document.querySelector('.daily-view-modal .sub-title');
+  var subTitleText = `נוכחים ${dailyPresence.totalPresence} `;
+  if (dailyPresence.totalHome) {
+    subTitleText += `| חופשה ${dailyPresence.totalHome} `;
+  }
+  if (dailyPresence.totalSick) {
+    subTitleText += `| מחלה ${dailyPresence.totalSick} `;
+  }
+  dailyModalSubTitleEl.innerText = subTitleText;
+  var dailyModalListsEl = document.querySelector('.daily-view-modal .lists');
   dailyModalListsEl.innerHTML = '';
 
   var count = 0;

@@ -330,10 +330,28 @@ ul.filtered-list li:nth-child(even) {
   border-bottom: 1px solid;
 }
 
+.daily-view .daily-view-modal .sub-title {
+  width: 100%;
+  display: block;
+  text-align: center;
+  padding-top: 20px;
+  font-size: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid;
+  color: #000000cf;
+  background-color: #ccc;
+}
+
 .in-iframe .daily-view .daily-view-modal .title {
   font-size: 20px;
   margin-top: 10px;
-  margin-top: 10px;
+  padding-bottom: 10px;
+}
+
+.in-iframe .daily-view .daily-view-modal .sub-title {
+  padding-bottom: 7px;
+  font-size: 16px;
+  padding-top: 5px;
 }
 
 .daily-view .daily-view-modal .close-btn {
