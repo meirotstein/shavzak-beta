@@ -274,7 +274,7 @@ ul.filtered-list li:nth-child(even) {
   width: 63%;
   margin-top: 20px;
   margin-right: 60px;
-  height: 12em;
+  height: 9em;
   padding: .1em 0.3em;
 }
 
@@ -291,7 +291,7 @@ ul.filtered-list li:nth-child(even) {
 .daily-view .action_btn {
   text-align: center;
   display: block;
-  padding-top: 5px;
+  padding-top: 10px;
   text-decoration: underline;
 }
 
