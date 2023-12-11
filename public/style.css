@@ -291,7 +291,7 @@ ul.filtered-list li:nth-child(even) {
 .daily-view .action_btn {
   text-align: center;
   display: block;
-  padding-top: 34px;
+  padding-top: 5px;
   text-decoration: underline;
 }
 
