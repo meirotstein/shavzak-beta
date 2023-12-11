@@ -83,7 +83,9 @@ function onSuccess(result) {
   data = result;
 
   var currDate = new Date(data.startDate);
+  currDate.setHours(0, 0, 0, 0);
   var endDate = new Date(data.endDate);
+  endDate.setHours(0, 0, 0, 0);
 
   while (currDate <= endDate) {
     dates.push(currDate);
