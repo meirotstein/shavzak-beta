@@ -606,7 +606,8 @@ function showPresenceModal() {
   dailyModalTitleEl.innerText = `נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}`;
   var dailyModalListsEl = document.querySelector('.daily-view-modal .lists');
   var dailyModalSubTitleEl = document.querySelector('.daily-view-modal .sub-title');
-  var subTitleText = `נוכחים ${dailyPresence.totalPresence} `;
+  var totalSum = dailyPresence.totalPresence + (dailyPresence.totalHome || 0) + (dailyPresence.totalSick || 0);
+  var subTitleText = `סהכ ${totalSum} | נוכחים ${dailyPresence.totalPresence} `;
   if (dailyPresence.totalHome) {
     subTitleText += `| חופשה ${dailyPresence.totalHome} `;
   }
