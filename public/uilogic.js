@@ -530,7 +530,7 @@ function createPlatoonView(platoon, dailyPresence, idx) {
     `<div class="head">
       <label>${platoon}</label>
       <label class="presence-len">${dailyPresence[platoon].presence.length}</label>
-      <label class="action_btn" onclick="showPlatoonPresenceList(${idx})">הצג רשימה</label>
+      <label class="action_btn" onclick="showPlatoonPresenceList(${idx})">הצג</label>
     </div>
     <div class="platoon-presence platoon-presence_${idx} hide">
       <div class="sub-head">
