@@ -374,7 +374,7 @@ function togglePresence(dayIdx, p) {
   var atHomeChange;
 
   if (typeof p === 'undefined') {
-    newPresence = (oldPresence === 1 ? 0 : 1);
+    newPresence = (oldPresence === 1 ? 0 : (oldPresence === 0 ? 2 : 1));
   } else {
     newPresence = p;
   }
@@ -383,6 +383,7 @@ function togglePresence(dayIdx, p) {
 
   selectedSoldier.presence[dayIdx] = newPresence;
 
+  // select order: 1 -> 0 -> 2 -> 1
   if (oldPresence === 1) {
     countChange = -1;
   } else if (newPresence === 1) {
