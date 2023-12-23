@@ -298,6 +298,7 @@ function selectSoldier(evt) {
   var bar = document.querySelector('.search-bar');
   var commentTA = document.querySelector('.comment textarea');
   commentTA.value = '';
+  var detailsIcon = document.querySelector('.main-view .details-icon');
 
   setListVisibility(false);
 
@@ -319,8 +320,13 @@ function selectSoldier(evt) {
     if (soldier) {
       selectedSoldier.profile = soldier;
       commentTA.value = soldier.comment;
+      detailsIcon.classList.remove('hide');
     }
   }
+}
+
+function showSoldierDetails() {
+  console.log(selectedSoldier);
 }
 
 function saveComment() {
@@ -700,6 +706,8 @@ function sharePresenceOnWhatsapp() {
 
 function clearSearchbarValue() {
   document.querySelector('.search-bar').value = '';
+  var detailsIcon = document.querySelector('.main-view .details-icon');
+  detailsIcon.classList.add('hide');
 }
 
 function showSpreadsheet() {
