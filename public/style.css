@@ -104,18 +104,17 @@ button {
 .filtered-list-c {
   position: absolute;
   max-height: 87%;
-  width: 97%;
+  width: 99%;
   overflow: auto;
   border: solid 2px;
   border-color: darkgray;
-  top: 4em;
+  top: 106px;
   margin-right: 3px;
   z-index: 999;
 }
 
 .in-iframe .filtered-list-c {
-  width: 92%;
-  top: 5em;
+  top: 2em;
   margin-right: 0px;
 }
 
