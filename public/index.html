@@ -32,9 +32,38 @@
     <input class="search-bar" placeholder=" חפש שם " oninput="filterList(this.value)" onfocus="clearSearchbarValue()" />
     <image class="details-icon hide" src="assets/details-18.svg" onclick="showSoldierDetails()"/>
     <div class="soldier-details-modal modal-window hide">
-      <label class="title"></label>
+      <label class="title">פרטי חייל</label>
       <span class="close-btn" onclick="hideSoldierDetailsModal()">&#x2715</span>
-      <div class="details"></div>
+      <div class="details">
+        <div class="details-category id">
+          <span class="details-item label">מ.א. </span><span class="details-item value"></span>
+        </div>
+        <div class="details-category name">
+          <span class="details-item label">שם </span><span class="details-item value"></span>
+        </div>
+        <div class="details-category platoon">
+          <span class="details-item label">מחלקה </span><span class="details-item value"></span>
+        </div>
+        <div class="details-category role">
+          <span class="details-item label">תפקיד </span><span class="details-item value"></span>
+        </div>
+        <div class="details-category presence">
+          <span class="details-item label">יממ </span><span class="details-item value"></span>
+        </div>
+        <div class="details-category presence-site">
+          <span class="details-item label">נוכח </span><span class="details-item value"></span>
+        </div>
+        <div class="details-category presence-home">
+          <span class="details-item label">חופשה </span><span class="details-item value"></span>
+        </div>
+        <div class="details-category presence-sick">
+          <span class="details-item label">מחלה </span><span class="details-item value"></span>
+        </div>
+        <div class="details-category comment">
+          <span class="details-item label">הערות</span><br>
+          <span class="details-item value"></span>
+        </div>
+      </div>
     </div>
     <div class="filtered-list-c" style="display:none;">
       <ul class="filtered-list"></ul>
@@ -65,7 +94,7 @@
 
     <div class="categories">
     </div>
-    <div class="comment">
+    <div class="comment hide">
       <label>הערות</label>
       <img style="display: none;" class="loader" src="loading.svg">
       <textarea disabled onblur="saveComment()"></textarea>

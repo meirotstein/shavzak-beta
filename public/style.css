@@ -263,11 +263,6 @@ ul.filtered-list li:nth-child(even) {
   font-weight: bold;
 }
 
-.comment {
-  display: none;
-  /* position: relative; */
-}
-
 .comment label {
   text-align: center;
   display: block;
@@ -456,6 +451,22 @@ ul.filtered-list li:nth-child(even) {
 
 .daily-view .daily-view-modal .platoon-view ul.presence-list li:nth-child(even) {
   background-color: #ccc;
+}
+
+.soldier-details-modal .details {
+  padding: 30px;
+}
+
+.soldier-details-modal .details .details-category{
+  padding-bottom: 30px;
+}
+
+.soldier-details-modal .details .details-category .details-item {
+  font-size: 55px;
+}
+
+.soldier-details-modal .details .details-category .details-item.label {
+  font-weight: bold;
 }
 
 .spreadsheet-wrapper {

@@ -117,7 +117,7 @@ function initView() {
   var today = new Date();
 
   var categoriesEl = document.querySelector('.categories');
-  var commentEl = document.querySelector('.comment');
+  var commentEl = document.querySelector('.main-view > .comment');
   var prevEl = document.querySelector('.days-page .prev');
   var nextEl = document.querySelector('.days-page .next');
 
@@ -262,7 +262,7 @@ function initView() {
     addCategory(name);
   }
 
-  commentEl.style.display = 'inherit';
+  commentEl.classList.remove('hide')
 }
 
 function setListVisibility(val) {
@@ -327,6 +327,46 @@ function selectSoldier(evt) {
 
 function showSoldierDetails() {
   console.log(selectedSoldier);
+  if (selectedSoldier) {
+    
+    var daysBetween = getDaysBetween(data.startDate, new Date());
+    var dayIdx = daysBetween;
+
+    var presence = 0, onsite = 0, home = 0, sick = 0;
+
+    for (var i = 0; i <= dayIdx; ++i) {
+      var p = selectedSoldier.presence[i];
+      if (typeof p !== undefined && p !== '') {
+        ++presence;
+      }
+      if (p === 0 || p === '0') {
+        ++home;
+      } else if (p === 1 || p === '1') {
+        ++onsite;
+      } else if (p === 2 || p === '2') {
+        ++sick;
+      }
+    }
+
+    var soldierDetailsModalEl = document.querySelector('.soldier-details-modal');
+  
+    document.querySelector('.soldier-details-modal .details .id .value').innerText = selectedSoldier.profile.id || '[לא הוזן]';
+    document.querySelector('.soldier-details-modal .details .name .value').innerText = selectedSoldier.profile.fullName || '[לא הוזן]';
+    document.querySelector('.soldier-details-modal .details .platoon .value').innerText = selectedSoldier.profile.platoon || '[לא הוזן]';
+    document.querySelector('.soldier-details-modal .details .role .value').innerText = selectedSoldier.profile.role || '[לא הוזן]';
+    document.querySelector('.soldier-details-modal .details .presence .value').innerText = presence;
+    document.querySelector('.soldier-details-modal .details .presence-site .value').innerText = onsite;
+    document.querySelector('.soldier-details-modal .details .presence-home .value').innerText = home;
+    document.querySelector('.soldier-details-modal .details .presence-sick .value').innerText = sick;
+    document.querySelector('.soldier-details-modal .details .comment .value').innerText = selectedSoldier.profile.comment || '[לא הוזן]';
+
+    soldierDetailsModalEl.classList.remove('hide');
+  }
+}
+
+function hideSoldierDetailsModal() {
+  var soldierDetailsModalEl = document.querySelector('.soldier-details-modal');
+  soldierDetailsModalEl.classList.add('hide');
 }
 
 function saveComment() {
