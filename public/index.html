@@ -31,6 +31,11 @@
   <div class="main-view" style="display: none;">
     <input class="search-bar" placeholder=" חפש שם " oninput="filterList(this.value)" onfocus="clearSearchbarValue()" />
     <image class="details-icon hide" src="assets/details-18.svg" onclick="showSoldierDetails()"/>
+    <div class="soldier-details-modal modal-window hide">
+      <label class="title"></label>
+      <span class="close-btn" onclick="hideSoldierDetailsModal()">&#x2715</span>
+      <div class="details"></div>
+    </div>
     <div class="filtered-list-c" style="display:none;">
       <ul class="filtered-list"></ul>
     </div>
@@ -67,7 +72,7 @@
     </div>
     <div class="daily-view">
       <label class="action_btn" onclick="showPresenceModal()">נוכחות יומית</label>
-      <div class="daily-view-modal hide">
+      <div class="daily-view-modal modal-window hide">
         <label class="title"></label>
         <label class="sub-title"></label>
         <span class="close-btn" onclick="hidePresenceModal()">&#x2715</span>

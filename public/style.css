@@ -315,7 +315,7 @@ ul.filtered-list li:nth-child(even) {
   padding-top: inherit;
 }
 
-.daily-view .daily-view-modal {
+.modal-window {
   position: fixed;
   height: calc(100% - 30px);
   width: calc(100% - 25px);
@@ -327,7 +327,7 @@ ul.filtered-list li:nth-child(even) {
   overflow: auto;
 }
 
-.in-iframe .daily-view .daily-view-modal {
+.in-iframe .modal-window {
   border: 2px solid;
   top: 2px;
   right: 1px;
@@ -335,7 +335,7 @@ ul.filtered-list li:nth-child(even) {
   width: calc(100% - 8px);
 }
 
-.daily-view .daily-view-modal .title {
+.modal-window .title {
   width: 100%;
   display: block;
   text-align: center;
@@ -346,7 +346,7 @@ ul.filtered-list li:nth-child(even) {
   border-bottom: 1px solid;
 }
 
-.daily-view .daily-view-modal .sub-title {
+.modal-window .sub-title {
   width: 100%;
   display: block;
   text-align: center;
@@ -358,19 +358,19 @@ ul.filtered-list li:nth-child(even) {
   background-color: #ccc;
 }
 
-.in-iframe .daily-view .daily-view-modal .title {
+.in-iframe .modal-window .title {
   font-size: 20px;
   margin-top: 10px;
   padding-bottom: 10px;
 }
 
-.in-iframe .daily-view .daily-view-modal .sub-title {
+.in-iframe .modal-window .sub-title {
   padding-bottom: 7px;
   font-size: 16px;
   padding-top: 5px;
 }
 
-.daily-view .daily-view-modal .close-btn {
+.modal-window .close-btn {
   position: absolute;
   top: 20px;
   font-size: 60px;
@@ -379,7 +379,7 @@ ul.filtered-list li:nth-child(even) {
   cursor: pointer;
 }
 
-.in-iframe .daily-view-modal .close-btn {
+.in-iframe .modal-window .close-btn {
   top: 7px;
   font-size: 23px;
   left: 13px;
