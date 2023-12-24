@@ -5,6 +5,7 @@ var dates = [];
 var dayEls = [];
 var weeksEls = [];
 var currentVisibleMonth = (new Date()).getMonth();
+var currentVisibleYear = (new Date()).getFullYear();
 var categories = {};
 var selectedSoldier;
 var selectedCategory = DEF_CAT;
@@ -122,12 +123,22 @@ function initView() {
   var nextEl = document.querySelector('.days-page .next');
 
   prevEl.onclick = function () {
-    --currentVisibleMonth;
+    if (currentVisibleMonth === 0) {
+      currentVisibleMonth = 11;
+      --currentVisibleYear;
+    } else {
+      --currentVisibleMonth;
+    }
     setWeeksVisibility();
   }
 
   nextEl.onclick = function () {
-    ++currentVisibleMonth;
+    if (currentVisibleMonth === 11) {
+      currentVisibleMonth = 0;
+      ++currentVisibleYear;
+    } else {
+      ++currentVisibleMonth;
+    }
     setWeeksVisibility();
   }
 
@@ -141,6 +152,7 @@ function initView() {
     }
     week.className = 'calendar-week';
     week.setAttribute('data-month', days[0].getMonth());
+    week.setAttribute('data-year', days[0].getFullYear());
 
     days.forEach(function (day, idx) {
       var dayTD = document.createElement('td');
@@ -154,7 +166,7 @@ function initView() {
       dayTD.appendChild(dayEL);
       dayEL.innerHTML =
         '<div class="date">' + day.getDate() + '/' + (day.getMonth() + 1) + '</div>' +
-        '<div class="amount">' + categories[DEF_CAT][idx + daysIdxOffset] + '</div>' +
+        '<div class="amount">' + (categories[DEF_CAT][idx + daysIdxOffset] || 0) + '</div>' +
         `<img style="display:none;" class="loader" src="loading.svg"></img>`;
 
       if (isiOS()) {
@@ -222,7 +234,8 @@ function initView() {
 
   function setWeeksVisibility() {
     weeksEls.forEach(function (week) {
-      if (parseInt(week.getAttribute('data-month')) === currentVisibleMonth) {
+      if (parseInt(week.getAttribute('data-month')) === currentVisibleMonth &&
+          parseInt(week.getAttribute('data-year')) === currentVisibleYear) {
         week.classList.remove('hide');
       } else {
         week.classList.add('hide');
