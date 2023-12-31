@@ -416,6 +416,19 @@ ul.filtered-list li:nth-child(even) {
   right: 0;
 }
 
+.in-iframe .daily-view .daily-view-modal .title .date-picker {
+  margin-right: 5px;
+}
+
+.in-iframe .daily-view .daily-view-modal .title .date-picker .date-picker-input {
+  width: 20px;
+  height: 20px;
+}
+
+.in-iframe  .daily-view .daily-view-modal .title .date-picker .date-picker-icon {
+  width: 20px;
+}
+
 .daily-view .daily-view-modal .platoon-view .head {
   padding: 20px 35px;
   display: grid;
