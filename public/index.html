@@ -102,7 +102,13 @@
     <div class="daily-view">
       <label class="action_btn" onclick="showPresenceModal()">נוכחות יומית</label>
       <div class="daily-view-modal modal-window hide">
-        <label class="title"></label>
+        <div class="title">
+          <label class="title-text"></label>
+          <div class="date-picker">
+            <image class="date-picker-icon" src="assets/date-icon.svg"/>
+            <input type="date" class='date-picker-input' onchange="setPresenceModalDate(event);">
+          </div>
+        </div>
         <label class="sub-title"></label>
         <span class="close-btn" onclick="hidePresenceModal()">&#x2715</span>
         <div class="whatsapp-btn" onclick="sharePresenceOnWhatsapp()">

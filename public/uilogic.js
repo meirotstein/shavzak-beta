@@ -656,14 +656,15 @@ function createPlatoonView(platoon, dailyPresence, idx) {
   return platoonViewEl;
 }
 
-function showPresenceModal() {
-  var currentDate = new Date();
+function showPresenceModal(date) {
+  var currentDate = date || new Date();
 
   var dailyPresence = getPresenceModel(currentDate);
 
   var dailyModalEl = document.querySelector('.daily-view-modal');
   var dailyModalTitleEl = document.querySelector('.daily-view-modal .title');
-  dailyModalTitleEl.innerText = `נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}`;
+  var dailyModalTitleTextEl = document.querySelector('.daily-view-modal .title-text');
+  dailyModalTitleTextEl.innerText = `נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}`;
   var dailyModalListsEl = document.querySelector('.daily-view-modal .lists');
   var dailyModalSubTitleEl = document.querySelector('.daily-view-modal .sub-title');
   var totalSum = dailyPresence.totalPresence + (dailyPresence.totalHome || 0) + (dailyPresence.totalSick || 0);
@@ -686,6 +687,10 @@ function showPresenceModal() {
   }
 
   dailyModalEl.classList.remove('hide');
+}
+
+function setPresenceModalDate(e) {
+  showPresenceModal(new Date(e.target.value));
 }
 
 function showPlatoonPresenceList(platoonIdx) {

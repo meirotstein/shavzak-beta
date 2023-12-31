@@ -331,13 +331,15 @@ ul.filtered-list li:nth-child(even) {
 
 .modal-window .title {
   width: 100%;
-  display: block;
+  display: flex;
   text-align: center;
   margin-top: 20px;
   font-size: 55px;
   font-weight: bold;
   padding-bottom: 30px;
   border-bottom: 1px solid;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-window .sub-title {
@@ -392,6 +394,26 @@ ul.filtered-list li:nth-child(even) {
 
 .daily-view .daily-view-modal .whatsapp-btn .whatsapp-icon {
   width: 80px;
+}
+
+.daily-view .daily-view-modal .title .date-picker {
+  position: relative;
+  margin-right: 20px;
+}
+
+.daily-view .daily-view-modal .title .date-picker .date-picker-input {
+  width: 60px;
+  height: 60px;
+  opacity: 0;
+  cursor: pointer;
+  border: 0;
+}
+
+.daily-view .daily-view-modal .title .date-picker .date-picker-icon {
+  width: 60px;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .daily-view .daily-view-modal .platoon-view .head {
