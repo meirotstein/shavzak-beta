@@ -690,7 +690,9 @@ function showPresenceModal(date) {
 }
 
 function setPresenceModalDate(e) {
-  showPresenceModal(new Date(e.target.value));
+  if (e.target.value) {
+    showPresenceModal(new Date(e.target.value));
+  }
 }
 
 function showPlatoonPresenceList(platoonIdx) {
