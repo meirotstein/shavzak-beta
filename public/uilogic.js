@@ -11,6 +11,7 @@ var selectedSoldier;
 var selectedCategory = DEF_CAT;
 var missionCounts = {};
 var loader;
+var presenceModelDate;
 
 // google.script.run.withSuccessHandler(onSuccess).loadData();
 
@@ -657,14 +658,13 @@ function createPlatoonView(platoon, dailyPresence, idx) {
 }
 
 function showPresenceModal(date) {
-  var currentDate = date || new Date();
+  presenceModelDate = date || new Date();
 
-  var dailyPresence = getPresenceModel(currentDate);
+  var dailyPresence = getPresenceModel(presenceModelDate);
 
   var dailyModalEl = document.querySelector('.daily-view-modal');
-  var dailyModalTitleEl = document.querySelector('.daily-view-modal .title');
   var dailyModalTitleTextEl = document.querySelector('.daily-view-modal .title-text');
-  dailyModalTitleTextEl.innerText = `נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}`;
+  dailyModalTitleTextEl.innerText = `נוכחות יומית ${presenceModelDate.getDate() + '/' + (presenceModelDate.getMonth() + 1)}`;
   var dailyModalListsEl = document.querySelector('.daily-view-modal .lists');
   var dailyModalSubTitleEl = document.querySelector('.daily-view-modal .sub-title');
   var totalSum = dailyPresence.totalPresence + (dailyPresence.totalHome || 0) + (dailyPresence.totalSick || 0);
@@ -703,15 +703,16 @@ function showPlatoonPresenceList(platoonIdx) {
 function hidePresenceModal() {
   var dailyModalEl = document.querySelector('.daily-view-modal');
   dailyModalEl.classList.add('hide');
+  presenceModelDate = undefined;
 }
 
 function sharePresenceOnWhatsapp() {
-  var currentDate = new Date();
+  if (!presenceModelDate) return;
 
-  var dailyPresence = getPresenceModel(currentDate);
+  var dailyPresence = getPresenceModel(presenceModelDate);
   var whatsappNewline = '%0a';
 
-  var msg = `*נוכחות יומית ${currentDate.getDate() + '/' + (currentDate.getMonth() + 1)}*${
+  var msg = `*נוכחות יומית ${presenceModelDate.getDate() + '/' + (presenceModelDate.getMonth() + 1)}*${
     whatsappNewline + whatsappNewline
   }${
     `סהכ נוכחים: ${dailyPresence.totalPresence}${whatsappNewline}סהכ בחופשה: ${dailyPresence.totalHome}${whatsappNewline}סהכ במחלה: ${dailyPresence.totalSick}${whatsappNewline}${whatsappNewline}`
