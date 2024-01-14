@@ -5,7 +5,7 @@ var apiKey = 'AIzaSyBqkmtsyrL9cZo5gnvCQsi_7cjj9mTo10w';
 // Enter the API Discovery Docs that describes the APIs you want to
 // access. In this example, we are accessing the People API, so we load
 // Discovery Doc found here: https://developers.google.com/people/api/rest/
-var discoveryDocs = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+var discoveryDocs = ["https://sheets.googleapis.com/$discovery/rest?version=v4","https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
 // Enter a client ID for a web application from the Google API Console:
 //   https://console.developers.google.com/apis/credentials?project=_
@@ -16,7 +16,7 @@ var clientId = '405201608861-r6i2r3pju0e3lvlt2m40b3d6drf9ik73.apps.googleusercon
 // Enter one or more authorization scopes. Refer to the documentation for
 // the API or https://developers.google.com/people/v1/how-tos/authorizing
 // for details.
-var scopes = 'https://www.googleapis.com/auth/spreadsheets';
+var scopes = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.metadata.readonly';
 
 var spreadsheetId = fetchSpreadsheetId();
 
@@ -53,6 +53,24 @@ function fetchSpreadsheetId() {
   return localStorage.getItem('spreadsheet--id');
 }
 
+async function isEditAllowed(fileId, userEmail) {
+  return gapi.client.drive.files.get({
+      'fileId': fileId,
+      'fields': 'id, name, permissions'
+  }).then(function(response) {
+      if (response.result.permissions) {
+        var userPermission = response.result.permissions.find((p) => p.emailAddress === userEmail);
+        if (userPermission) {
+          return userPermission.role === 'writer' || userPermission.role === 'owner';
+        }
+      }
+      return false;
+  }, function(error) {
+      console.error('Error fetching permissions:', error);
+      return false;
+  });
+}
+
 function handleClientLoad() {
   if (iniFrame()) {
     document.body.className = 'in-iframe';
@@ -69,17 +87,17 @@ function initClient() {
     scope: scopes
   }).then(function () {
     // Listen for sign-in state changes.
-    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
 
     // Handle the initial sign-in state.
-    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
 
     authorizeButton.onclick = handleAuthClick;
     signoutButton.onclick = handleSignoutClick;
   });
 }
 
-function updateSigninStatus(isSignedIn) {
+function updateSignInStatus(isSignedIn) {
   if (isSignedIn) {
     window.userProfile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
 

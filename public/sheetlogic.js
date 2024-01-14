@@ -25,6 +25,7 @@ function showManagementDialog() {
 async function initSettings() {
   
   METADATA = await SpreadsheetApp.getMetadata();
+  METADATA.isReadOnly = !await isEditAllowed(METADATA.spreadsheetId, userProfile.getEmail());
 
   var presenceSettingsRange = await SettingsSheet.getRange(1, 2, 40);
   var presenceSettings = presenceSettingsRange.getValues().map(function (val) { return val[0] });

@@ -111,6 +111,9 @@ function showTitleIfApplicable() {
   if (meta && meta.properties) {
     var titleEl = document.querySelector('.spreadsheet-title');
     titleEl.textContent = meta.properties.title;
+    if (meta.isReadOnly) {
+      titleEl.textContent += ' [צפיה בלבד]'
+    }
   }
 }
 
@@ -144,6 +147,7 @@ function initView() {
   }
 
   function addCalendarWeek(days, weekNum, weekOffset) {
+    var meta = getMeta();
     var calendar = document.querySelector('.calendar tbody');
     var week = document.createElement('tr');
     weeksEls.push(week);
@@ -170,22 +174,24 @@ function initView() {
         '<div class="amount">' + (categories[DEF_CAT][idx + daysIdxOffset] || 0) + '</div>' +
         `<img style="display:none;" class="loader" src="loading.svg"></img>`;
 
-      if (isiOS()) {
-        console.log('iOS events');
-        var timer = {};
-        dayEL.ontouchstart = (function (index) {
-          timer[index] = Date.now();
-        }).bind(this, idx);
-        dayEL.ontouchend = (function (index) {
-          if (Date.now() - timer[index] < 500) {
-            togglePresence(this.dates.indexOf(day), undefined);
-          } else {
-            togglePresence(this.dates.indexOf(day), '');
-          }
-        }).bind(this, idx)
-      } else {
-        dayEL.onclick = togglePresence.bind(this, this.dates.indexOf(day), undefined);
-        dayEL.oncontextmenu = togglePresence.bind(this, this.dates.indexOf(day), '');
+      if (!meta.isReadOnly) {
+        if (isiOS()) {
+          console.log('iOS events');
+          var timer = {};
+          dayEL.ontouchstart = (function (index) {
+            timer[index] = Date.now();
+          }).bind(this, idx);
+          dayEL.ontouchend = (function (index) {
+            if (Date.now() - timer[index] < 500) {
+              togglePresence(this.dates.indexOf(day), undefined);
+            } else {
+              togglePresence(this.dates.indexOf(day), '');
+            }
+          }).bind(this, idx)
+        } else {
+          dayEL.onclick = togglePresence.bind(this, this.dates.indexOf(day), undefined);
+          dayEL.oncontextmenu = togglePresence.bind(this, this.dates.indexOf(day), '');
+        }
       }
 
       week.appendChild(dayTD);
@@ -305,6 +311,7 @@ function filterList(value) {
 }
 
 function selectSoldier(evt) {
+  var meta = getMeta();
   var idx =
     evt.target.getAttribute('data-idx') ||          // li
     evt.target.parentNode.getAttribute('data-idx'); // li > span
@@ -325,8 +332,7 @@ function selectSoldier(evt) {
     bar.value = sData.name;
     fixPresence(sData);
     applyPresence(sData);
-
-    commentTA.removeAttribute('disabled');
+    
     var soldier = data.soldiers.find(function (s) {
       return s.description === sData.name;
     });
@@ -335,6 +341,10 @@ function selectSoldier(evt) {
       selectedSoldier.profile = soldier;
       commentTA.value = soldier.comment;
       detailsIcon.classList.remove('hide');
+    }
+
+    if (!meta.isReadOnly) {
+      commentTA.removeAttribute('disabled');
     }
   }
 }
