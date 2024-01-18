@@ -480,6 +480,10 @@ function togglePresence(dayIdx, p) {
 
 function updatePresenceUI(dayIdx, presence) {
   var el = dayEls[dayIdx];
+  if (!el) {
+    console.error('updating wrong day index - probably a overflows the configured dates span', {dayIdx, presence});
+    return;
+  }
   switch (presence) {
     case 0:
     case '0':
