@@ -27,14 +27,15 @@ async function initSettings() {
   METADATA = await SpreadsheetApp.getMetadata();
   METADATA.isReadOnly = !await isEditAllowed(METADATA.spreadsheetId, userProfile.getEmail());
 
-  var presenceSettingsRange = await SettingsSheet.getRange(1, 2, 40);
-  var presenceSettings = presenceSettingsRange.getValues().map(function (val) { return val[0] });
-
-  var missionsSettingsRange = await SettingsSheet.getRange(1, 4, 40);
-  var missionsSettings = missionsSettingsRange.getValues().map(function (val) { return val[0] });
-
-  var soldiersSettingsRange = await SettingsSheet.getRange(1, 6, 40);
-  var soldiersSettings = soldiersSettingsRange.getValues().map(function (val) { return val[0] });
+  var settingsRange = await SettingsSheet.getRange(1, 1, 40, 6);
+  var presenceSettings = [];
+  var missionsSettings = [];
+  var soldiersSettings = [];
+  settingsRange.getValues().forEach(function(sRow) {
+    typeof sRow[1] !== 'undefined' && presenceSettings.push(sRow[1]);
+    typeof sRow[3] !== 'undefined' && missionsSettings.push(sRow[3]);
+    typeof sRow[5] !== 'undefined' && soldiersSettings.push(sRow[5]);
+  });
 
   console.log({ presenceSettings: presenceSettings, missionsSettings: missionsSettings, soldiersSettings: soldiersSettings });
 
