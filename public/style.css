@@ -223,6 +223,10 @@ ul.filtered-list li:nth-child(even) {
   background: #ffe599;
 }
 
+.calendar tr td .calendar-day.arrangement {
+  background: #B8D4F0;
+}
+
 .days-pages {
   display: flex;
   justify-content: space-between;

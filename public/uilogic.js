@@ -356,7 +356,7 @@ function showSoldierDetails() {
     var daysBetween = getDaysBetween(data.startDate, new Date());
     var dayIdx = daysBetween;
 
-    var presence = 0, onsite = 0, home = 0, sick = 0;
+    var presence = 0, onsite = 0, home = 0, sick = 0, arrangement = 0;
 
     for (var i = 0; i <= dayIdx; ++i) {
       var p = selectedSoldier.presence[i];
@@ -369,6 +369,8 @@ function showSoldierDetails() {
         ++onsite;
       } else if (p === 2 || p === '2') {
         ++sick;
+      } else if (p === 3 || p === '3') {
+        ++arrangement;
       }
     }
 
@@ -382,6 +384,7 @@ function showSoldierDetails() {
     document.querySelector('.soldier-details-modal .details .presence-site .value').innerText = onsite;
     document.querySelector('.soldier-details-modal .details .presence-home .value').innerText = home;
     document.querySelector('.soldier-details-modal .details .presence-sick .value').innerText = sick;
+    document.querySelector('.soldier-details-modal .details .presence-arrangement .value').innerText = arrangement;
     document.querySelector('.soldier-details-modal .details .comment .value').innerText = selectedSoldier.profile.comment || '[לא הוזן]';
 
     soldierDetailsModalEl.classList.remove('hide');
@@ -444,7 +447,12 @@ function togglePresence(dayIdx, p) {
   var atHomeChange;
 
   if (typeof p === 'undefined') {
-    newPresence = (oldPresence === 1 ? 0 : (oldPresence === 0 ? 2 : 1));
+    // Special case: if current status is arrangement (3), convert to presence (1)
+    if (oldPresence === 3 || oldPresence === '3') {
+      newPresence = 1;
+    } else {
+      newPresence = (oldPresence === 1 ? 0 : (oldPresence === 0 ? 2 : 1));
+    }
   } else {
     newPresence = p;
   }
@@ -490,6 +498,7 @@ function updatePresenceUI(dayIdx, presence) {
       // day off
       el.classList.remove('present');
       el.classList.remove('sick');
+      el.classList.remove('arrangement');
       el.classList.add('off');
       break;
     case 1:
@@ -497,6 +506,7 @@ function updatePresenceUI(dayIdx, presence) {
       // present
       el.classList.remove('off');
       el.classList.remove('sick');
+      el.classList.remove('arrangement');
       el.classList.add('present');
 
       break;
@@ -505,12 +515,22 @@ function updatePresenceUI(dayIdx, presence) {
       // sick (betim/gimelim)
       el.classList.remove('off');
       el.classList.remove('present');
+      el.classList.remove('arrangement');
       el.classList.add('sick');
+      break;
+    case 3:
+    case '3':
+      // arrangement
+      el.classList.remove('off');
+      el.classList.remove('present');
+      el.classList.remove('sick');
+      el.classList.add('arrangement');
       break;
     default:
       el.classList.remove('present');
       el.classList.remove('off');
       el.classList.remove('sick');
+      el.classList.remove('arrangement');
   }
 }
 
@@ -563,6 +583,7 @@ function getPresenceModel(date) {
     totalPresence: 0,
     totalHome: 0,
     totalSick: 0,
+    totalArrangement: 0,
     platoons: new Set(),
   };
   
@@ -580,6 +601,7 @@ function getPresenceModel(date) {
     dailyPresence[platoon].presence = dailyPresence[platoon].presence || [];
     dailyPresence[platoon].home = dailyPresence[platoon].home || [];
     dailyPresence[platoon].sick = dailyPresence[platoon].sick || [];
+    dailyPresence[platoon].arrangement = dailyPresence[platoon].arrangement || [];
 
     var presence = soldier.presence[dayIdx] + "";
     if (presence === '1') {
@@ -591,6 +613,9 @@ function getPresenceModel(date) {
     } else if (presence === '2') {
       dailyPresence[platoon].sick.push(name);
       ++dailyPresence.totalSick;
+    } else if (presence === '3') {
+      dailyPresence[platoon].arrangement.push(name);
+      ++dailyPresence.totalArrangement;
     }
   });
 
@@ -606,7 +631,7 @@ function createPlatoonView(platoon, dailyPresence, idx) {
       <label>${platoon}</label>
       <label class="presence-len">
         ${
-          (dailyPresence[platoon].presence.length + dailyPresence[platoon].home.length + dailyPresence[platoon].sick.length) +
+          (dailyPresence[platoon].presence.length + dailyPresence[platoon].home.length + dailyPresence[platoon].sick.length + dailyPresence[platoon].arrangement.length) +
           ' / ' +
           dailyPresence[platoon].presence.length
         }
@@ -672,6 +697,28 @@ function createPlatoonView(platoon, dailyPresence, idx) {
           return '';
         }()
       }
+      ${
+        function() {
+          if (dailyPresence[platoon].arrangement.length) {
+            return `
+              <div class="sub-head">
+                <label>התארגנות (${dailyPresence[platoon].arrangement.length})</label>
+              </div>
+              <ul class="presence-list">
+                ${
+                  function() {
+                    var lis = '';
+                    dailyPresence[platoon].arrangement.forEach(function(name) {
+                      lis += `<li>${name}</li>`;
+                    })
+                    return lis;
+                  }()
+                }
+              </ul>`
+          }
+          return '';
+        }()
+      }
     </div>
   `
   return platoonViewEl;
@@ -687,13 +734,16 @@ function showPresenceModal(date) {
   dailyModalTitleTextEl.innerText = `נוכחות יומית ${presenceModelDate.getDate() + '/' + (presenceModelDate.getMonth() + 1)}`;
   var dailyModalListsEl = document.querySelector('.daily-view-modal .lists');
   var dailyModalSubTitleEl = document.querySelector('.daily-view-modal .sub-title');
-  var totalSum = dailyPresence.totalPresence + (dailyPresence.totalHome || 0) + (dailyPresence.totalSick || 0);
+  var totalSum = dailyPresence.totalPresence + (dailyPresence.totalHome || 0) + (dailyPresence.totalSick || 0) + (dailyPresence.totalArrangement || 0);
   var subTitleText = `סהכ ${totalSum} | נוכחים ${dailyPresence.totalPresence} `;
   if (dailyPresence.totalHome) {
     subTitleText += `| חופשה ${dailyPresence.totalHome} `;
   }
   if (dailyPresence.totalSick) {
     subTitleText += `| מחלה ${dailyPresence.totalSick} `;
+  }
+  if (dailyPresence.totalArrangement) {
+    subTitleText += `| התארגנות ${dailyPresence.totalArrangement} `;
   }
   dailyModalSubTitleEl.innerText = subTitleText;
   var dailyModalListsEl = document.querySelector('.daily-view-modal .lists');
@@ -735,7 +785,7 @@ function sharePresenceOnWhatsapp() {
   var msg = `*נוכחות יומית ${presenceModelDate.getDate() + '/' + (presenceModelDate.getMonth() + 1)}*${
     whatsappNewline + whatsappNewline
   }${
-    `סהכ נוכחים: ${dailyPresence.totalPresence}${whatsappNewline}סהכ בחופשה: ${dailyPresence.totalHome}${whatsappNewline}סהכ במחלה: ${dailyPresence.totalSick}${whatsappNewline}${whatsappNewline}`
+    `סהכ נוכחים: ${dailyPresence.totalPresence}${whatsappNewline}סהכ בחופשה: ${dailyPresence.totalHome}${whatsappNewline}סהכ במחלה: ${dailyPresence.totalSick}${whatsappNewline}סהכ בהתארגנות: ${dailyPresence.totalArrangement}${whatsappNewline}${whatsappNewline}`
   }
   ${
     function() {
@@ -766,6 +816,17 @@ function sharePresenceOnWhatsapp() {
             if (dailyPresence[platoon].sick.length) {
               var lis = `*_במחלה (${dailyPresence[platoon].sick.length})_*${whatsappNewline}`;
               dailyPresence[platoon].sick.forEach(function(name) {
+                lis += `${name}${whatsappNewline}`;
+              })
+              return `${lis}${whatsappNewline}`;
+            }
+            return '';
+          }()
+        }${
+          function() {
+            if (dailyPresence[platoon].arrangement.length) {
+              var lis = `*_התארגנות (${dailyPresence[platoon].arrangement.length})_*${whatsappNewline}`;
+              dailyPresence[platoon].arrangement.forEach(function(name) {
                 lis += `${name}${whatsappNewline}`;
               })
               return `${lis}${whatsappNewline}`;
