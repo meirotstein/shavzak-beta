@@ -1,5 +1,10 @@
 # localserver
 
+## Branch note
+
+The `public` content on the `master` branch is not the production version of the old app.
+The currently deployed old app was updated directly on the `gh-pages` branch.
+
 Simple express server implementation for private usage
 
 ```sh
