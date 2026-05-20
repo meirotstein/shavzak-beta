@@ -1,25 +1,5 @@
-var CONSTS = {
-  NAME_COL: 2,
-  NAME_ROW_S: 13,
-  NAME_ROW_L: 87,
-  CAT_ROW_S: 4,
-  CAT_ROW_L: 7,
-  DATE_COL: 'B',
-  DATE_START_IDX: 1,
-  DATE_END_IDX: 2,
-
-  JOB_ROW_S: 2,
-  JOB_COL: 3,
-  JOB_COL_L: 8,
-  MISSION_ROW_S: 16,
-  MISSION_COL: 3,
-  MISSION_COL_L: 8,
-
-  SOL_ROW_S: 3,
-  SOL_ROW_L: 90,
-  SOL_COL: 1,
-  SOL_COL_L: 7,
-}
+var SETTINGS = {};
+var METADATA;
 
 var data = {
   sList: [],
@@ -31,6 +11,7 @@ var data = {
 var MainSheet = SpreadsheetApp.getActive().getSheetByName('נוכחות');
 var MissionsSheet = SpreadsheetApp.getActive().getSheetByName('משימות');
 var SoldiersSheet = SpreadsheetApp.getActive().getSheetByName('חיילים');
+var SettingsSheet = SpreadsheetApp.getActive().getSheetByName('settings');
 
 function showManagementDialog() {
   var html = HtmlService.createHtmlOutputFromFile('mg_dialog')
@@ -41,31 +22,78 @@ function showManagementDialog() {
     .showSidebar(html);
 }
 
+async function initSettings() {
+  
+  METADATA = await SpreadsheetApp.getMetadata();
+  METADATA.isReadOnly = !await isEditAllowed(METADATA.spreadsheetId, userProfile.getEmail());
+
+  var settingsRange = await SettingsSheet.getRange(1, 1, 40, 6);
+  var presenceSettings = [];
+  var missionsSettings = [];
+  var soldiersSettings = [];
+  settingsRange.getValues().forEach(function(sRow) {
+    typeof sRow[1] !== 'undefined' && presenceSettings.push(sRow[1]);
+    typeof sRow[3] !== 'undefined' && missionsSettings.push(sRow[3]);
+    typeof sRow[5] !== 'undefined' && soldiersSettings.push(sRow[5]);
+  });
+
+  console.log({ presenceSettings: presenceSettings, missionsSettings: missionsSettings, soldiersSettings: soldiersSettings });
+
+  SETTINGS = {
+    NAME_COL: presenceSettings[0],  // also affects CAT col
+    NAME_ROW_S: presenceSettings[1],
+    NAME_ROW_L: presenceSettings[2],
+    CAT_ROW_S: presenceSettings[3],
+    CAT_ROW_L: presenceSettings[4],
+    DATE_COL: 'B',
+    DATE_START_IDX: 1,
+    DATE_END_IDX: 2,
+
+    JOB_ROW_S: 2,
+    JOB_COL: 3,
+    JOB_COL_L: missionsSettings[0],
+    MISSION_ROW_S: missionsSettings[1],
+    MISSION_COL: 3,
+    JOB_COL_L: missionsSettings[0],
+
+    SOL_ROW_S: 3,
+    SOL_ROW_L: soldiersSettings[0],
+    SOL_COL: 1,
+    SOL_COL_L: 7,
+  }
+}
+
 async function loadData() {
-  var period = await MainSheet.getRange(CONSTS.DATE_COL + CONSTS.DATE_START_IDX + ':' + CONSTS.DATE_COL + CONSTS.DATE_END_IDX);
+
+  await initSettings();
+
+  var period = await MainSheet.getRange(SETTINGS.DATE_COL + SETTINGS.DATE_START_IDX + ':' + SETTINGS.DATE_COL + SETTINGS.DATE_END_IDX);
   data.startDate = period.getValues()[0][0].getTime();
   data.endDate = period.getValues()[1][0].getTime();
 
   var numOfDays = (data.endDate - data.startDate) / (1000 * 60 * 60 * 24) + 1;
 
   var sList = [];
-  var nameRange = await MainSheet.getRange(CONSTS.NAME_ROW_S, CONSTS.NAME_COL, CONSTS.NAME_ROW_L, numOfDays + 1);
-  for (var i = 0; i < CONSTS.NAME_ROW_L; ++i) {
+  var nameRange = await MainSheet.getRange(SETTINGS.NAME_ROW_S, SETTINGS.NAME_COL, SETTINGS.NAME_ROW_L, numOfDays + 1);
+  for (var i = 0; i < SETTINGS.NAME_ROW_L; ++i) {
     var values = nameRange.getValues();
+    if(!values || !values.length) {
+      throw 'no_names_error';
+    }
     var name = values[i] && values[i][0];
     if (name) {
       var presence = values[i].slice(1);
       data.sList.push({
-        idx: CONSTS.NAME_ROW_S + i,
+        idx: SETTINGS.NAME_ROW_S + i,
         name: name,
         presence: presence
       });
     }
   }
 
-  var categoryRange = await MainSheet.getRange(CONSTS.CAT_ROW_S, CONSTS.NAME_COL, CONSTS.CAT_ROW_L, numOfDays + 1);
+  var categoryRange = await MainSheet.getRange(SETTINGS.CAT_ROW_S, SETTINGS.NAME_COL, SETTINGS.CAT_ROW_L, numOfDays + 1);
   var categories = categoryRange.getValues();
-  for (var i = 0; i < CONSTS.CAT_ROW_L; ++i) {
+  for (var i = 0; i < SETTINGS.CAT_ROW_L; ++i) {
     var cat = categories[i][0];
     if (cat) {
       var sums = categories[i].slice(1);
@@ -76,9 +104,9 @@ async function loadData() {
     }
   }
 
-  var jobsRange = await MissionsSheet.getRange(CONSTS.JOB_ROW_S, CONSTS.JOB_COL, 1, CONSTS.JOB_COL_L);
+  var jobsRange = await MissionsSheet.getRange(SETTINGS.JOB_ROW_S, SETTINGS.JOB_COL, 1, SETTINGS.JOB_COL_L);
   var jobs = jobsRange.getValues();
-  var missionRange = await MissionsSheet.getRange(CONSTS.MISSION_ROW_S, CONSTS.MISSION_COL, 1, CONSTS.MISSION_COL_L);
+  var missionRange = await MissionsSheet.getRange(SETTINGS.MISSION_ROW_S, SETTINGS.MISSION_COL, 1, SETTINGS.MISSION_COL_L);
   var missionCounts = missionRange.getValues();
 
   if (jobs && jobs.length && missionCounts && missionCounts.length) {
@@ -87,20 +115,19 @@ async function loadData() {
     });
   }
 
-  var soldiersRange = await SoldiersSheet.getRange(CONSTS.SOL_ROW_S, CONSTS.SOL_COL, CONSTS.SOL_ROW_L, CONSTS.SOL_COL_L);
+  var soldiersRange = await SoldiersSheet.getRange(SETTINGS.SOL_ROW_S, SETTINGS.SOL_COL, SETTINGS.SOL_ROW_L, SETTINGS.SOL_COL_L);
   var soldiers = soldiersRange.getValues();
 
   if (soldiers && soldiers.length) {
     soldiers.forEach(function (s, idx) {
       data.soldiers.push({
-        row: CONSTS.SOL_ROW_S + idx,
+        row: SETTINGS.SOL_ROW_S + idx,
         id: s[0],
-        firstName: s[1],
-        lastName: s[2],
-        platoon: s[3],
-        role: s[4],
-        description: s[5],
-        comment: s[6]
+        fullName: s[1],
+        platoon: s[2],
+        role: s[3],
+        description: s[4],
+        comment: s[5] || ''
       });
     });
   }
@@ -108,18 +135,22 @@ async function loadData() {
   return data;
 }
 
-function setPresenceData(sIndex, dayIdx, value) {
-  var range = MainSheet.getRange(sIndex, dayIdx + CONSTS.NAME_COL, 1);
+async function setPresenceData(sIndex, dayIdx, value) {
+  var range = await MainSheet.getRange(sIndex, dayIdx + SETTINGS.NAME_COL, 1);
   if (range) {
-    range.setValue(value);
+    return range.setValue(value);
   }
 }
 
-function setCommentData(rowIdx, value) {
-  var range = SoldiersSheet.getRange(rowIdx, 7);
+async function setCommentData(rowIdx, value) {
+  var range = await SoldiersSheet.getRange(rowIdx, 6);
   if (range) {
-    range.setValue(value);
+    return range.setValue(value);
   }
+}
+
+function getMeta() {
+  return METADATA;
 }
 
 function foo() {
