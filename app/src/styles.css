@@ -288,6 +288,11 @@ button:disabled {
   background: #c9dff4;
 }
 
+.calendar-day.save-error {
+  border-color: #c53030;
+  box-shadow: inset 0 0 0 2px #c53030;
+}
+
 .date-text {
   color: #165b74;
   font-size: 14px;

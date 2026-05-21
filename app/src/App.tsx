@@ -81,7 +81,9 @@ export function App() {
   const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
   const [selectedSoldier, setSelectedSoldier] = useState<SelectedSoldier | null>(null);
   const [query, setQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
   const [savingDays, setSavingDays] = useState<Set<number>>(() => new Set());
+  const [failedDays, setFailedDays] = useState<Set<number>>(() => new Set());
   const [commentSaving, setCommentSaving] = useState(false);
   const [dailyDate, setDailyDate] = useState<Date | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -92,9 +94,9 @@ export function App() {
   const dates = useMemo(() => (data ? buildDateRange(data.startDate, data.endDate) : []), [data]);
 
   const filteredSoldiers = useMemo(() => {
-    if (!data || !query.trim()) return [];
+    if (!data || !searchFocused || !query.trim()) return [];
     return data.presenceRows.filter((soldier) => soldier.description.includes(query.trim())).slice(0, 30);
-  }, [data, query]);
+  }, [data, query, searchFocused]);
 
   const visibleDates = useMemo(
     () => dates.map((date, index) => ({ date, index })).filter(({ date }) => isSameMonth(date, calendarMonth, calendarYear)),
@@ -245,7 +247,9 @@ export function App() {
     while (selection.presence.length < dates.length) selection.presence.push('');
     setSelectedSoldier(selection);
     setQuery(selection.description);
+    setSearchFocused(false);
     setDetailsOpen(false);
+    setFailedDays(new Set());
   }
 
   async function savePresence(dayIndex: number, requestedValue?: PresenceValue) {
@@ -260,6 +264,11 @@ export function App() {
       presence: selectedSoldier.presence.map((value, idx) => (idx === dayIndex ? newValue : value)),
     });
     setSavingDays((current) => new Set(current).add(dayIndex));
+    setFailedDays((current) => {
+      const next = new Set(current);
+      next.delete(dayIndex);
+      return next;
+    });
 
     try {
       await repo.setPresence(data.settings, selectedSoldier.row, dayIndex, newValue);
@@ -273,7 +282,7 @@ export function App() {
       });
       applyLocalCategoryChange(dayIndex, category, countDelta(oldValue, newValue), homeDelta(oldValue, newValue));
     } catch {
-      setSelectedSoldier(selectedSoldier);
+      setFailedDays((current) => new Set(current).add(dayIndex));
       setError('שמירת הנוכחות נכשלה');
     } finally {
       setSavingDays((current) => {
@@ -369,11 +378,12 @@ export function App() {
               onChange={(event) => setQuery(event.target.value)}
               onFocus={() => {
                 setQuery('');
+                setSearchFocused(true);
                 setDetailsOpen(false);
               }}
               placeholder="חפש שם"
             />
-            {filteredSoldiers.length > 0 && (
+            {searchFocused && filteredSoldiers.length > 0 && (
               <ul className="result-list">
                 {filteredSoldiers.map((soldier) => (
                   <li key={soldier.row}>
@@ -392,6 +402,7 @@ export function App() {
             sums={categorySums[selectedCategory] || []}
             missionTarget={data.missionCounts[selectedCategory]}
             savingDays={savingDays}
+            failedDays={failedDays}
             monthLabel={monthLabel(calendarMonth, calendarYear)}
             canGoPrev={dates.some((date) => date < new Date(calendarYear, calendarMonth, 1))}
             canGoNext={dates.some((date) => date > new Date(calendarYear, calendarMonth + 1, 0))}
@@ -445,6 +456,7 @@ function Calendar(props: {
   sums: number[];
   missionTarget?: number;
   savingDays: Set<number>;
+  failedDays: Set<number>;
   monthLabel: string;
   canGoPrev: boolean;
   canGoNext: boolean;
@@ -484,6 +496,7 @@ function Calendar(props: {
               count={count}
               undercount={undercount}
               saving={props.savingDays.has(cell.index)}
+              failed={props.failedDays.has(cell.index)}
               disabled={!props.selectedSoldier || props.readOnly}
               onChange={props.onChange}
             />
@@ -501,12 +514,18 @@ function PresenceCell(props: {
   count: number;
   undercount: boolean;
   saving: boolean;
+  failed: boolean;
   disabled: boolean;
   onChange: (dayIndex: number, value?: PresenceValue) => void;
 }) {
   const pressStarted = useRef(0);
   const longPressFired = useRef(false);
-  const className = ['calendar-day', props.presence && `presence-${props.presence}`, isToday(props.date) && 'today']
+  const className = [
+    'calendar-day',
+    props.presence && `presence-${props.presence}`,
+    isToday(props.date) && 'today',
+    props.failed && 'save-error',
+  ]
     .filter(Boolean)
     .join(' ');
 
