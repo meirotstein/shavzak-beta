@@ -20,6 +20,7 @@ import {
 } from './services/config';
 import { GoogleAuthService } from './services/googleAuth';
 import { SpreadsheetRepository } from './services/spreadsheetRepository';
+import logoUrl from './assets/logo-8208.png';
 
 type ViewState = 'booting' | 'signed-out' | 'ready' | 'loading' | 'loaded' | 'error';
 
@@ -40,7 +41,7 @@ function spreadsheetIdFromLocation(): string {
     localStorage.setItem(SPREADSHEET_STORAGE_KEY, fromUrl);
     return fromUrl;
   }
-  return localStorage.getItem(SPREADSHEET_STORAGE_KEY) || '';
+  return '';
 }
 
 function categoriesByName(categories: CategorySummary[]): Record<string, number[]> {
@@ -74,7 +75,7 @@ function statusLabel(value: PresenceValue): string {
 export function App() {
   const [view, setView] = useState<ViewState>('booting');
   const [error, setError] = useState('');
-  const [spreadsheetId, setSpreadsheetId] = useState(spreadsheetIdFromLocation);
+  const [spreadsheetId] = useState(spreadsheetIdFromLocation);
   const [data, setData] = useState<CompanyData | null>(null);
   const [categorySums, setCategorySums] = useState<Record<string, number[]>>({});
   const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORY);
@@ -327,8 +328,8 @@ export function App() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <div>
-          <h1>שבצק</h1>
+        <div className="brand-title">
+          <h1>שבצק 8208</h1>
           {data && (
             <p>
               {data.meta.title}
@@ -336,11 +337,9 @@ export function App() {
             </p>
           )}
         </div>
+        <img src={logoUrl} alt="" className="brand-logo" />
         {view !== 'booting' && view !== 'signed-out' && (
           <div className="topbar-actions">
-            <a className="ghost-link" href="../">
-              גרסה ישנה
-            </a>
             <button className="ghost-button" type="button" onClick={signOut}>
               יציאה
             </button>
@@ -355,27 +354,6 @@ export function App() {
           <button className="primary-button" type="button" onClick={signIn}>
             כניסה עם Google
           </button>
-        </section>
-      )}
-
-      {(view === 'ready' || view === 'loaded' || view === 'error') && (
-        <section className="sheet-panel">
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              void loadSpreadsheet(spreadsheetId);
-            }}
-          >
-            <input
-              value={spreadsheetId}
-              onChange={(event) => setSpreadsheetId(event.target.value)}
-              placeholder="spreadsheet id"
-              dir="ltr"
-            />
-            <button className="primary-button" type="submit">
-              טעינה
-            </button>
-          </form>
         </section>
       )}
 
