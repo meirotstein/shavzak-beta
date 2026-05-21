@@ -341,7 +341,7 @@ export function App() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-title">
-          <h1>שבצק 8208</h1>
+          <h1>שבצק</h1>
           {data && (
             <p>
               {data.meta.title}

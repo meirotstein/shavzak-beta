@@ -53,7 +53,7 @@ button {
 .brand-logo {
   grid-column: 2;
   grid-row: 1;
-  width: 100px;
+  width: 80px;
   height: 58px;
   border-radius: 8px;
   object-fit: contain;
@@ -320,7 +320,7 @@ button:disabled {
 .calendar-day {
   position: relative;
   display: grid;
-  min-height: 68px;
+  min-height: 60px;
   grid-template-rows: auto 1fr;
   place-items: center;
   padding: 6px 2px;
@@ -385,11 +385,11 @@ button:disabled {
   left: 50%;
   width: 20px;
   height: 20px;
-  margin: -10px 0 0 -10px;
+  transform: translate(-50%, -50%);
   border: 3px solid #9fb3c8;
   border-top-color: #16697a;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin-centered 0.8s linear infinite;
 }
 
 .category-strip {
@@ -613,6 +613,16 @@ button:disabled {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-centered {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
