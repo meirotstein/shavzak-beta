@@ -85,6 +85,7 @@ export function App() {
   const [savingDays, setSavingDays] = useState<Set<number>>(() => new Set());
   const [failedDays, setFailedDays] = useState<Set<number>>(() => new Set());
   const [commentSaving, setCommentSaving] = useState(false);
+  const [commentFailed, setCommentFailed] = useState(false);
   const [dailyDate, setDailyDate] = useState<Date | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [calendarMonth, setCalendarMonth] = useState(() => new Date().getMonth());
@@ -311,6 +312,7 @@ export function App() {
     if (!repo || !currentProfile || !selectedSoldier || isReadOnly) return;
 
     setCommentSaving(true);
+    setCommentFailed(false);
     try {
       await repo.setComment(currentProfile.row, value);
       const updatedProfile = { ...currentProfile, comment: value };
@@ -322,6 +324,7 @@ export function App() {
         });
       }
     } catch {
+      setCommentFailed(true);
       setError('שמירת ההערה נכשלה');
     } finally {
       setCommentSaving(false);
@@ -356,7 +359,7 @@ export function App() {
         )}
       </header>
 
-      {view === 'booting' && <StatePanel title="טוען Google..." />}
+      {view === 'booting' && <SkeletonLoader />}
 
       {view === 'signed-out' && (
         <section className="auth-panel">
@@ -366,7 +369,7 @@ export function App() {
         </section>
       )}
 
-      {view === 'loading' && <StatePanel title="טוען נתונים..." />}
+      {view === 'loading' && <SkeletonLoader />}
       {error && <div className="error-banner">{error}</div>}
 
       {data && view === 'loaded' && (
@@ -423,6 +426,7 @@ export function App() {
             profile={currentProfile}
             readOnly={isReadOnly}
             saving={commentSaving}
+            failed={commentFailed}
             onCommentSave={(value) => void saveComment(value)}
             onDetails={() => setDetailsOpen(true)}
           />
@@ -448,6 +452,36 @@ export function App() {
 
 function StatePanel({ title }: { title: string }) {
   return <section className="state-panel">{title}</section>;
+}
+
+function SkeletonLoader() {
+  return (
+    <section className="workspace skeleton-workspace" aria-label="טוען נתונים">
+      <div className="skeleton skeleton-search" />
+      <div className="calendar-panel skeleton-calendar">
+        <div className="skeleton skeleton-nav" />
+        <div className="weekdays">
+          {['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'].map((day) => (
+            <span key={day}>{day}</span>
+          ))}
+        </div>
+        <div className="calendar-grid">
+          {Array.from({ length: 28 }, (_, idx) => (
+            <div className="skeleton skeleton-day" key={idx} />
+          ))}
+        </div>
+      </div>
+      <div className="category-strip">
+        {Array.from({ length: 4 }, (_, idx) => (
+          <div className="skeleton skeleton-chip" key={idx} />
+        ))}
+      </div>
+      <div className="soldier-panel">
+        <div className="skeleton skeleton-line wide" />
+        <div className="skeleton skeleton-textarea" />
+      </div>
+    </section>
+  );
 }
 
 function Calendar(props: {
@@ -520,6 +554,7 @@ function PresenceCell(props: {
 }) {
   const pressStarted = useRef(0);
   const longPressFired = useRef(false);
+  const suppressContextMenu = useRef(false);
   const className = [
     'calendar-day',
     props.presence && `presence-${props.presence}`,
@@ -529,16 +564,20 @@ function PresenceCell(props: {
     .filter(Boolean)
     .join(' ');
 
-  function startPress() {
+  function startPress(event: React.PointerEvent<HTMLButtonElement>) {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
     pressStarted.current = Date.now();
     longPressFired.current = false;
+    suppressContextMenu.current = false;
   }
 
-  function endPress() {
+  function endPress(event: React.PointerEvent<HTMLButtonElement>) {
     if (props.disabled) return;
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
     const elapsed = Date.now() - pressStarted.current;
     if (elapsed >= 500) {
       longPressFired.current = true;
+      suppressContextMenu.current = true;
       props.onChange(props.dayIndex, '');
       return;
     }
@@ -558,6 +597,10 @@ function PresenceCell(props: {
       }}
       onContextMenu={(event) => {
         event.preventDefault();
+        if (suppressContextMenu.current) {
+          suppressContextMenu.current = false;
+          return;
+        }
         if (!props.disabled) props.onChange(props.dayIndex, '');
       }}
     >
@@ -590,6 +633,7 @@ function SoldierPanel(props: {
   profile?: { comment: string };
   readOnly: boolean;
   saving: boolean;
+  failed: boolean;
   onCommentSave: (value: string) => void;
   onDetails: () => void;
 }) {
@@ -616,6 +660,7 @@ function SoldierPanel(props: {
       <label>
         הערות
         <textarea
+          className={props.failed ? 'save-error' : undefined}
           value={comment}
           disabled={props.readOnly}
           onChange={(event) => setComment(event.target.value)}
@@ -660,13 +705,21 @@ function DailyModal(props: { data: CompanyData; date: Date; onDate: (date: Date)
         </button>
         <div className="modal-title">
           <h2>נוכחות יומית {formatShortDate(props.date)}</h2>
-          <input
-            type="date"
-            value={inputValue}
-            onChange={(event) => {
-              if (event.target.value) props.onDate(dateFromInput(event.target.value));
-            }}
-          />
+          <label className="date-picker-button" aria-label="בחירת תאריך">
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="calendar-icon">
+              <path d="M7 2v3" />
+              <path d="M17 2v3" />
+              <path d="M4 9h16" />
+              <rect x="4" y="5" width="16" height="16" rx="2" />
+            </svg>
+            <input
+              type="date"
+              value={inputValue}
+              onChange={(event) => {
+                if (event.target.value) props.onDate(dateFromInput(event.target.value));
+              }}
+            />
+          </label>
         </div>
         <div className="summary-line">
           סהכ {total} | נוכחים {daily.totalPresence} | חופשה {daily.totalHome} | מחלה {daily.totalSick} | התארגנות{' '}
