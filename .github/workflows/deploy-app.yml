@@ -1,0 +1,62 @@
+name: Deploy new app
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - app/**
+      - .github/workflows/deploy-app.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Checkout GitHub Pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: pages
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: source/app/package-lock.json
+
+      - name: Install dependencies
+        working-directory: source/app
+        run: npm ci
+
+      - name: Build app
+        working-directory: source/app
+        run: npm run build
+
+      - name: Copy app into gh-pages/app
+        run: |
+          rm -rf pages/app
+          mkdir -p pages/app
+          cp -R source/app/dist/. pages/app/
+
+      - name: Commit and push
+        working-directory: pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app
+          if git diff --cached --quiet; then
+            echo "No changes to deploy"
+          else
+            git commit -m "Deploy new app"
+            git push
+          fi
