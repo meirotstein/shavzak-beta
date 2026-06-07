@@ -92,7 +92,10 @@ export function App() {
   const [calendarYear, setCalendarYear] = useState(() => new Date().getFullYear());
 
   const repo = useMemo(() => (spreadsheetId ? new SpreadsheetRepository(spreadsheetId) : null), [spreadsheetId]);
-  const dates = useMemo(() => (data ? buildDateRange(data.startDate, data.endDate) : []), [data]);
+  const dates = useMemo(
+    () => (data ? buildDateRange(data.startDate, data.endDate) : []),
+    [data?.startDate, data?.endDate],
+  );
 
   const filteredSoldiers = useMemo(() => {
     if (!data || !searchFocused || !query.trim()) return [];
