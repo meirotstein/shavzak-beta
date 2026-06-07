@@ -679,6 +679,13 @@ function DailyModal(props: { data: CompanyData; date: Date; onDate: (date: Date)
   const daily = createDailyPresence(props.data, props.date);
   const total = daily.totalPresence + daily.totalHome + daily.totalSick + daily.totalArrangement;
   const inputValue = dateInputValue(props.date);
+  const summaryItems = [
+    ['סהכ', total],
+    ['נוכחים', daily.totalPresence],
+    ['חופשה', daily.totalHome],
+    ['מחלה', daily.totalSick],
+    ['התארגנות', daily.totalArrangement],
+  ];
 
   function share() {
     const newline = '\n';
@@ -702,31 +709,40 @@ function DailyModal(props: { data: CompanyData; date: Date; onDate: (date: Date)
 
   return (
     <div className="modal-backdrop">
-      <section className="modal-window">
-        <button className="close-button" type="button" onClick={props.onClose} aria-label="סגירה">
-          ×
-        </button>
-        <div className="modal-title">
-          <h2>נוכחות יומית {formatShortDate(props.date)}</h2>
-          <label className="date-picker-button" aria-label="בחירת תאריך">
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="calendar-icon">
-              <path d="M7 2v3" />
-              <path d="M17 2v3" />
-              <path d="M4 9h16" />
-              <rect x="4" y="5" width="16" height="16" rx="2" />
-            </svg>
-            <input
-              type="date"
-              value={inputValue}
-              onChange={(event) => {
-                if (event.target.value) props.onDate(dateFromInput(event.target.value));
-              }}
-            />
-          </label>
+      <section className="modal-window daily-window">
+        <div className="daily-modal-header">
+          <div className="modal-actions">
+            <button className="close-button" type="button" onClick={props.onClose} aria-label="סגירה">
+              ×
+            </button>
+            <label className="date-picker-button" aria-label="בחירת תאריך">
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="calendar-icon">
+                <path d="M7 2v3" />
+                <path d="M17 2v3" />
+                <path d="M4 9h16" />
+                <rect x="4" y="5" width="16" height="16" rx="2" />
+              </svg>
+              <input
+                type="date"
+                value={inputValue}
+                onChange={(event) => {
+                  if (event.target.value) props.onDate(dateFromInput(event.target.value));
+                }}
+              />
+            </label>
+          </div>
+          <h2>
+            <span>נוכחות יומית</span>
+            <strong>{formatShortDate(props.date)}</strong>
+          </h2>
         </div>
         <div className="summary-line">
-          סהכ {total} | נוכחים {daily.totalPresence} | חופשה {daily.totalHome} | מחלה {daily.totalSick} | התארגנות{' '}
-          {daily.totalArrangement}
+          {summaryItems.map(([label, value]) => (
+            <span className="summary-item" key={label}>
+              <span>{label}</span>
+              <strong>{value}</strong>
+            </span>
+          ))}
         </div>
         <button className="primary-button share-button" type="button" onClick={share}>
           שיתוף WhatsApp

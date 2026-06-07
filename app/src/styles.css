@@ -469,10 +469,9 @@ button:disabled {
 }
 
 .close-button {
-  position: sticky;
-  top: 0;
-  float: left;
-  z-index: 1;
+  position: absolute;
+  top: 14px;
+  left: 14px;
   width: 44px;
   padding: 0;
   background: #1f2933;
@@ -481,17 +480,49 @@ button:disabled {
   line-height: 1;
 }
 
-.modal-title {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 8px;
-  padding-inline-start: 48px;
+.daily-window {
+  padding: 0;
 }
 
-.modal-title h2,
+.daily-modal-header {
+  display: grid;
+  grid-template-columns: minmax(104px, auto) 1fr minmax(104px, auto);
+  align-items: center;
+  gap: 12px;
+  min-height: 120px;
+  padding: 22px 28px;
+  direction: ltr;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.daily-modal-header .close-button {
+  position: static;
+  flex: 0 0 auto;
+}
+
+.daily-modal-header h2 {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  color: #1f2933;
+  direction: rtl;
+  font-size: 34px;
+  line-height: 1.08;
+  text-align: center;
+}
+
+.daily-modal-header h2 strong {
+  font-size: 30px;
+}
+
 .details-window h2 {
-  margin: 0 0 12px;
+  margin: 0 0 18px;
+  padding-left: 52px;
   font-size: 24px;
 }
 
@@ -500,7 +531,7 @@ button:disabled {
   display: grid;
   width: 44px;
   height: 44px;
-  margin-left: 8px;
+  flex: 0 0 auto;
   place-items: center;
   border: 1px solid #bcccdc;
   border-radius: 8px;
@@ -532,22 +563,44 @@ button:disabled {
 }
 
 .summary-line {
-  margin: 0 -14px 12px;
-  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0 0 12px;
   background: #eef2f7;
   color: #243b53;
   text-align: center;
   font-weight: 700;
 }
 
+.summary-item {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 10px 6px;
+  background: #eef2f7;
+}
+
+.summary-item span {
+  color: #52606d;
+  font-size: 13px;
+}
+
+.summary-item strong {
+  color: #243b53;
+  font-size: 23px;
+  line-height: 1;
+}
+
 .share-button {
-  width: 100%;
-  margin-bottom: 10px;
+  width: calc(100% - 28px);
+  margin: 0 14px 10px;
 }
 
 .platoon-list {
   display: grid;
   gap: 8px;
+  padding: 0 14px 14px;
 }
 
 .platoon-card {
@@ -647,5 +700,34 @@ button:disabled {
 
   .count {
     font-size: 26px;
+  }
+}
+
+@media (max-width: 520px) {
+  .daily-modal-header {
+    grid-template-columns: auto 1fr;
+    min-height: 98px;
+    padding: 14px;
+  }
+
+  .daily-modal-header::after {
+    content: none;
+  }
+
+  .daily-modal-header h2 {
+    font-size: 25px;
+    text-align: right;
+  }
+
+  .daily-modal-header h2 strong {
+    font-size: 23px;
+  }
+
+  .summary-line {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .summary-item strong {
+    font-size: 20px;
   }
 }
